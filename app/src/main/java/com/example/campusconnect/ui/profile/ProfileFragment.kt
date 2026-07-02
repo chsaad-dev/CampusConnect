@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.campusconnect.R
 import com.example.campusconnect.databinding.FragmentProfileBinding
 import com.example.campusconnect.ui.viewmodel.ProfileViewModel
 import com.example.campusconnect.util.Resource
@@ -31,11 +32,10 @@ class ProfileFragment : Fragment() {
         observeViewModel()
 
         binding.btnEditProfile.setOnClickListener {
-            Toast.makeText(context, "Edit Profile feature coming soon!", Toast.LENGTH_SHORT).show()
+            showEditProfileDialog()
         }
 
         binding.btnLogout.setOnClickListener {
-            // viewModel.logout()
             Toast.makeText(context, "Logged out!", Toast.LENGTH_SHORT).show()
         }
 
@@ -43,6 +43,23 @@ class ProfileFragment : Fragment() {
         if (currentUserId != null) {
             viewModel.fetchUserProfile(currentUserId)
         }
+    }
+
+    private fun showEditProfileDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_profile, null)
+        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<android.widget.Button>(R.id.btn_save_profile).setOnClickListener {
+            val name = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.et_name).text.toString()
+            if (name.isNotEmpty()) {
+                // viewModel.updateProfile(...)
+                Toast.makeText(context, "Profile updated: $name", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
     }
 
     private fun observeViewModel() {

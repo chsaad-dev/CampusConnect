@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.campusconnect.R
 import com.example.campusconnect.databinding.FragmentChatBinding
 import com.example.campusconnect.ui.adapter.ChatAdapter
 import com.example.campusconnect.ui.viewmodel.ChatViewModel
@@ -34,14 +35,32 @@ class ChatFragment : Fragment() {
         observeViewModel()
 
         binding.fabNewChat.setOnClickListener {
-            Toast.makeText(context, "New chat feature coming soon!", Toast.LENGTH_SHORT).show()
+            showNewChatDialog()
         }
 
         val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
         if (currentUserId != null) {
             viewModel.fetchChats(currentUserId)
         }
-    }//heyy how
+    }
+
+    private fun showNewChatDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_new_chat, null)
+        val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<android.widget.Button>(R.id.btn_start_chat).setOnClickListener {
+            val identifier = dialogView.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.et_user_identifier).text.toString()
+            val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+            if (identifier.isNotEmpty() && currentUserId != null) {
+                viewModel.startNewChat(identifier, currentUserId)
+                Toast.makeText(context, "Chat started with $identifier", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+        }
+        dialog.show()
+    }
 
     private fun setupRecyclerView() {
         adapter = ChatAdapter(

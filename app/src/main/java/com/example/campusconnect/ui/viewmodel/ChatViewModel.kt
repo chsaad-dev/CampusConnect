@@ -37,4 +37,13 @@ class ChatViewModel @Inject constructor(
     fun sendMessage(chatId: String, message: Message) {
         repo.sendMessage(chatId, message).onEach { _sendStatus.value = it }.launchIn(viewModelScope)
     }
+
+    fun startNewChat(participantId: String, currentUserId: String) {
+        val chat = Chat(
+            participants = listOf(currentUserId, participantId),
+            lastMessage = "Started a new conversation",
+            lastMessageTimestamp = System.currentTimeMillis()
+        )
+        repo.createChat(chat).onEach { /* Handle status if needed */ }.launchIn(viewModelScope)
+    }
 }

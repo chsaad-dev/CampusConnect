@@ -1,36 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="176dp"
-    android:background="@color/primary"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:layout_height="180dp"
+    android:background="@drawable/nav_header_bg"
+    android:padding="16dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/iv_profile_header"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:padding="2dp"
         android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintBottom_toTopOf="@id/tv_name_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
         app:strokeColor="@color/white"
         app:strokeWidth="2dp" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Student Name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tv_name_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="student.email@university.edu" />
+        android:layout_marginTop="12dp"
+        android:text="Campus Connect"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_email_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile_header" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_email_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect with your Campus"
+        android:textColor="#E0E0E0"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name_header" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

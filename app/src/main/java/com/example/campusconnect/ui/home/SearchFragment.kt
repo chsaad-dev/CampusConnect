@@ -44,14 +44,21 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupSearch() {
+        binding.btnSearch.setOnClickListener {
+            performSearch()
+        }
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = binding.etSearch.text.toString().trim()
-                if (query.isNotEmpty()) {
-                    viewModel.searchAll(query)
-                }
+                performSearch()
                 true
             } else false
+        }
+    }
+
+    private fun performSearch() {
+        val query = binding.etSearch.text.toString().trim()
+        if (query.isNotEmpty()) {
+            viewModel.searchAll(query)
         }
     }
 
