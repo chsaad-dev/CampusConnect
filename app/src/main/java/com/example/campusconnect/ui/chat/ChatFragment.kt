@@ -41,7 +41,7 @@ class ChatFragment : Fragment() {
         if (currentUserId != null) {
             viewModel.fetchChats(currentUserId)
         }
-    }
+    }//heyy how
 
     private fun setupRecyclerView() {
         adapter = ChatAdapter(
