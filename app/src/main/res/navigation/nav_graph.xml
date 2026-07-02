@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.campusconnect.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_notes"
+        android:name="com.example.campusconnect.ui.notes.NotesFragment"
+        android:label="Notes"
+        tools:layout="@layout/fragment_notes" />
+
+    <fragment
+        android:id="@+id/nav_lost_found"
+        android:name="com.example.campusconnect.ui.lostfound.LostFoundFragment"
+        android:label="Lost &amp; Found"
+        tools:layout="@layout/fragment_lost_found" />
+
+    <fragment
+        android:id="@+id/nav_rides"
+        android:name="com.example.campusconnect.ui.rides.RidesFragment"
+        android:label="Rides"
+        tools:layout="@layout/fragment_rides" />
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.campusconnect.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/nav_blood_donation"
+        android:name="com.example.campusconnect.ui.blood.BloodDonationFragment"
+        android:label="Blood Donation"
+        tools:layout="@layout/fragment_blood_donation" />
+
+    <fragment
+        android:id="@+id/nav_complaints"
+        android:name="com.example.campusconnect.ui.complaints.ComplaintsFragment"
+        android:label="Complaints"
+        tools:layout="@layout/fragment_complaints" />
+
+    <fragment
+        android:id="@+id/nav_events"
+        android:name="com.example.campusconnect.ui.events.EventsFragment"
+        android:label="Events"
+        tools:layout="@layout/fragment_events" />
+
+    <fragment
+        android:id="@+id/nav_jobs"
+        android:name="com.example.campusconnect.ui.jobs.JobsFragment"
+        android:label="Jobs"
+        tools:layout="@layout/fragment_jobs" />
+
+    <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.example.campusconnect.ui.chat.ChatFragment"
+        android:label="Messages"
+        tools:layout="@layout/fragment_chat" />
+
+</navigation>
