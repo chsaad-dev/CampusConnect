@@ -39,7 +39,10 @@ class ProfileFragment : Fragment() {
             Toast.makeText(context, "Logged out!", Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.fetchUserProfile("current_user_id") // TODO: Get actual user ID
+        val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserId != null) {
+            viewModel.fetchUserProfile(currentUserId)
+        }
     }
 
     private fun observeViewModel() {

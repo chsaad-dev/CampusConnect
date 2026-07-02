@@ -44,7 +44,12 @@ class RidesFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = RideAdapter(
             onJoinClick = { ride ->
-                viewModel.joinRide(ride.id, "current_user_id") // TODO: Get actual user ID
+                val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+                if (currentUserId != null) {
+                    viewModel.joinRide(ride.id, currentUserId)
+                } else {
+                    Toast.makeText(context, "Please login to join", Toast.LENGTH_SHORT).show()
+                }
             }
         )
         binding.rvRides.adapter = adapter

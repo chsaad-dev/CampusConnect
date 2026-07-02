@@ -39,7 +39,10 @@ class ComplaintsFragment : Fragment() {
             Toast.makeText(context, "New complaint feature coming soon!", Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.fetchMyComplaints("current_student_id") // TODO: Get actual student ID
+        val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserId != null) {
+            viewModel.fetchMyComplaints(currentUserId)
+        }
     }
 
     private fun setupRecyclerView() {

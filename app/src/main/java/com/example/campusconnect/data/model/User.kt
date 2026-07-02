@@ -15,6 +15,6 @@ data class User(
     val badges: List<String> = emptyList(),
     val reputationPoints: Int = 0,
     val role: String = "Student", // Student, Teacher, Admin
-    val isVerified: Boolean = false,
+    val verified: Boolean = false,
     val fcmToken: String = ""
 )

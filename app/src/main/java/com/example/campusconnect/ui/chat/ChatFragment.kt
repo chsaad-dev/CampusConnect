@@ -37,7 +37,10 @@ class ChatFragment : Fragment() {
             Toast.makeText(context, "New chat feature coming soon!", Toast.LENGTH_SHORT).show()
         }
 
-        viewModel.fetchChats("current_user_id") // TODO: Get actual user ID
+        val currentUserId = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+        if (currentUserId != null) {
+            viewModel.fetchChats(currentUserId)
+        }
     }
 
     private fun setupRecyclerView() {
