@@ -55,7 +55,15 @@ class HomeFragment : Fragment() {
             onLikeClick = { post -> viewModel.toggleLike(post) },
             onCommentClick = { post -> showComments(post.postId) },
             onShareClick = { post -> sharePost(post) },
-            onCardClick = { post -> /* Navigate to detail screen in Phase 3 */ }
+            onCardClick = { post -> 
+                val bundle = Bundle().apply { putString("postId", post.postId) }
+                when (post.type) {
+                    com.campusconnect.domain.model.PostType.NOTE -> findNavController().navigate(R.id.action_homeFragment_to_noteDetailFragment, bundle)
+                    com.campusconnect.domain.model.PostType.BLOOD -> findNavController().navigate(R.id.action_homeFragment_to_bloodRequestDetailFragment, bundle)
+                    com.campusconnect.domain.model.PostType.LOST_FOUND -> findNavController().navigate(R.id.action_homeFragment_to_lostFoundDetailFragment, bundle)
+                    com.campusconnect.domain.model.PostType.RIDE -> findNavController().navigate(R.id.action_homeFragment_to_rideDetailFragment, bundle)
+                }
+            }
         )
 
         binding.rvFeed.layoutManager = LinearLayoutManager(requireContext())

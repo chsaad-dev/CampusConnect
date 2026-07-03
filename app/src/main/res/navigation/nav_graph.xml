@@ -109,6 +109,34 @@
                 app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_in_left"
                 app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_homeFragment_to_noteDetailFragment"
+                app:destination="@id/noteDetailFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_homeFragment_to_bloodRequestDetailFragment"
+                app:destination="@id/bloodRequestDetailFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_homeFragment_to_lostFoundDetailFragment"
+                app:destination="@id/lostFoundDetailFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_homeFragment_to_rideDetailFragment"
+                app:destination="@id/rideDetailFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
         </fragment>
 
         <fragment
@@ -128,6 +156,46 @@
                 app:destination="@id/auth_nav_graph"
                 app:popUpTo="@id/main_nav_graph"
                 app:popUpToInclusive="true" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/noteDetailFragment"
+            android:name="com.campusconnect.feature.post_detail.NoteDetailFragment"
+            android:label="Note Details"
+            tools:layout="@layout/fragment_note_detail">
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/bloodRequestDetailFragment"
+            android:name="com.campusconnect.feature.post_detail.BloodRequestDetailFragment"
+            android:label="Blood Request Details"
+            tools:layout="@layout/fragment_blood_request_detail">
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/lostFoundDetailFragment"
+            android:name="com.campusconnect.feature.post_detail.LostFoundDetailFragment"
+            android:label="Lost Found Details"
+            tools:layout="@layout/fragment_lost_found_detail">
+            <argument
+                android:name="postId"
+                app:argType="string" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/rideDetailFragment"
+            android:name="com.campusconnect.feature.post_detail.RideDetailFragment"
+            android:label="Ride Details"
+            tools:layout="@layout/fragment_ride_detail">
+            <argument
+                android:name="postId"
+                app:argType="string" />
         </fragment>
 
     </navigation>

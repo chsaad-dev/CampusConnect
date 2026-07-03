@@ -1,14 +1,23 @@
 package com.campusconnect.domain.repository
 
 import com.campusconnect.core.common.Resource
+import com.campusconnect.domain.model.BloodRequestDetails
 import com.campusconnect.domain.model.Comment
+import com.campusconnect.domain.model.LostFoundDetails
+import com.campusconnect.domain.model.NoteDetails
 import com.campusconnect.domain.model.Post
+import com.campusconnect.domain.model.RideDetails
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
     fun getFeed(lastVisibleTimestamp: Long?, limit: Int): Flow<Resource<List<Post>>>
-    fun createPost(post: Post, fileUri: android.net.Uri?): Flow<Resource<Unit>>
+    fun createPost(post: Post, fileUri: android.net.Uri?, extraData: Map<String, Any> = emptyMap()): Flow<Resource<Unit>>
     fun toggleLike(postId: String): Flow<Resource<Boolean>>
     fun getComments(postId: String): Flow<Resource<List<Comment>>>
     fun addComment(postId: String, text: String): Flow<Resource<Comment>>
+    
+    fun getNoteDetails(postId: String): Flow<Resource<NoteDetails>>
+    fun getBloodRequestDetails(postId: String): Flow<Resource<BloodRequestDetails>>
+    fun getLostFoundDetails(postId: String): Flow<Resource<LostFoundDetails>>
+    fun getRideDetails(postId: String): Flow<Resource<RideDetails>>
 }

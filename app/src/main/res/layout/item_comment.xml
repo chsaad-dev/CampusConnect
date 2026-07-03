@@ -33,7 +33,7 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
-                tools:text="Saad Fareedi" />
+                tools:text="Saad" />
 
             <TextView
                 android:id="@+id/tv_username"
@@ -42,7 +42,7 @@
                 android:textSize="11sp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:layout_marginStart="4dp"
-                tools:text="\@saad_fareedi" />
+                tools:text="\@saad" />
 
             <TextView
                 android:id="@+id/tv_time"

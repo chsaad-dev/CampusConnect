@@ -4,9 +4,13 @@ import android.net.Uri
 import com.campusconnect.core.common.Constants
 import com.campusconnect.core.common.Resource
 import com.campusconnect.data.remote.dto.UserDto
+import com.campusconnect.domain.model.BloodRequestDetails
 import com.campusconnect.domain.model.Comment
+import com.campusconnect.domain.model.LostFoundDetails
+import com.campusconnect.domain.model.NoteDetails
 import com.campusconnect.domain.model.Post
 import com.campusconnect.domain.model.PostType
+import com.campusconnect.domain.model.RideDetails
 import com.campusconnect.domain.repository.PostRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -64,7 +68,7 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun createPost(post: Post, fileUri: Uri?): Flow<Resource<Unit>> = flow {
+    override fun createPost(post: Post, fileUri: Uri?, extraData: Map<String, Any>): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         try {
             val uid = auth.currentUser?.uid ?: throw Exception("User not logged in")
@@ -107,39 +111,39 @@ class PostRepositoryImpl @Inject constructor(
             when (post.type) {
                 PostType.NOTE -> {
                     val noteRef = firestore.collection(Constants.COLLECTION_NOTES).document(newPostId)
-                    batch.set(noteRef, mapOf(
-                        "postId" to newPostId,
-                        "uploaderId" to uid,
-                        "fileUrl" to (mediaUrls.firstOrNull() ?: ""),
-                        "createdAt" to finalPost.createdAt
-                    ))
+                    val noteData = extraData.toMutableMap()
+                    noteData["postId"] = newPostId
+                    noteData["uploaderId"] = uid
+                    noteData["fileUrl"] = mediaUrls.firstOrNull() ?: ""
+                    noteData["createdAt"] = finalPost.createdAt
+                    batch.set(noteRef, noteData)
                 }
                 PostType.BLOOD -> {
                     val bloodRef = firestore.collection(Constants.COLLECTION_BLOOD_REQUESTS).document(newPostId)
-                    batch.set(bloodRef, mapOf(
-                        "postId" to newPostId,
-                        "requesterId" to uid,
-                        "status" to "open",
-                        "createdAt" to finalPost.createdAt
-                    ))
+                    val bloodData = extraData.toMutableMap()
+                    bloodData["postId"] = newPostId
+                    bloodData["requesterId"] = uid
+                    bloodData["status"] = "open"
+                    bloodData["createdAt"] = finalPost.createdAt
+                    batch.set(bloodRef, bloodData)
                 }
                 PostType.LOST_FOUND -> {
                     val lfRef = firestore.collection(Constants.COLLECTION_LOST_FOUND).document(newPostId)
-                    batch.set(lfRef, mapOf(
-                        "postId" to newPostId,
-                        "ownerId" to uid,
-                        "status" to "lost",
-                        "createdAt" to finalPost.createdAt
-                    ))
+                    val lfData = extraData.toMutableMap()
+                    lfData["postId"] = newPostId
+                    lfData["ownerId"] = uid
+                    lfData["status"] = "lost"
+                    lfData["createdAt"] = finalPost.createdAt
+                    batch.set(lfRef, lfData)
                 }
                 PostType.RIDE -> {
                     val rideRef = firestore.collection(Constants.COLLECTION_RIDES).document(newPostId)
-                    batch.set(rideRef, mapOf(
-                        "postId" to newPostId,
-                        "driverId" to uid,
-                        "status" to "active",
-                        "createdAt" to finalPost.createdAt
-                    ))
+                    val rideData = extraData.toMutableMap()
+                    rideData["postId"] = newPostId
+                    rideData["driverId"] = uid
+                    rideData["status"] = "active"
+                    rideData["createdAt"] = finalPost.createdAt
+                    batch.set(rideRef, rideData)
                 }
             }
 
@@ -235,6 +239,50 @@ class PostRepositoryImpl @Inject constructor(
             emit(Resource.Success(comment))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to add comment"))
+        }
+    }
+
+    override fun getNoteDetails(postId: String): Flow<Resource<NoteDetails>> = flow {
+        emit(Resource.Loading)
+        try {
+            val doc = firestore.collection(Constants.COLLECTION_NOTES).document(postId).get().await()
+            val details = doc.toObject(NoteDetails::class.java) ?: throw Exception("Details not found")
+            emit(Resource.Success(details))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch note details"))
+        }
+    }
+
+    override fun getBloodRequestDetails(postId: String): Flow<Resource<BloodRequestDetails>> = flow {
+        emit(Resource.Loading)
+        try {
+            val doc = firestore.collection(Constants.COLLECTION_BLOOD_REQUESTS).document(postId).get().await()
+            val details = doc.toObject(BloodRequestDetails::class.java) ?: throw Exception("Details not found")
+            emit(Resource.Success(details))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch blood request details"))
+        }
+    }
+
+    override fun getLostFoundDetails(postId: String): Flow<Resource<LostFoundDetails>> = flow {
+        emit(Resource.Loading)
+        try {
+            val doc = firestore.collection(Constants.COLLECTION_LOST_FOUND).document(postId).get().await()
+            val details = doc.toObject(LostFoundDetails::class.java) ?: throw Exception("Details not found")
+            emit(Resource.Success(details))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch lost & found details"))
+        }
+    }
+
+    override fun getRideDetails(postId: String): Flow<Resource<RideDetails>> = flow {
+        emit(Resource.Loading)
+        try {
+            val doc = firestore.collection(Constants.COLLECTION_RIDES).document(postId).get().await()
+            val details = doc.toObject(RideDetails::class.java) ?: throw Exception("Details not found")
+            emit(Resource.Success(details))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch ride details"))
         }
     }
 }

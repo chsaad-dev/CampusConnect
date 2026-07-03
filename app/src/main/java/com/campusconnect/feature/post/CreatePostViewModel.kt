@@ -30,7 +30,8 @@ class CreatePostViewModel @Inject constructor(
         mediaType: MediaType,
         fileUri: Uri?,
         department: String,
-        visibility: String = "public"
+        visibility: String = "public",
+        extraData: Map<String, Any> = emptyMap()
     ) {
         val post = Post(
             type = type,
@@ -40,7 +41,7 @@ class CreatePostViewModel @Inject constructor(
             visibility = visibility
         )
 
-        postRepository.createPost(post, fileUri).onEach { result ->
+        postRepository.createPost(post, fileUri, extraData).onEach { result ->
             _uploadState.value = result
         }.launchIn(viewModelScope)
     }
