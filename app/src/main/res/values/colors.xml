@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Light theme colors -->
-    <color name="primary">#1A73E8</color>
-    <color name="primary_dark">#1557B0</color>
+    <color name="primary">#4A3AFF</color>
+    <color name="primary_dark">#382CC4</color>
     <color name="on_primary">#FFFFFF</color>
-    <color name="primary_container">#D3E3FD</color>
-    <color name="on_primary_container">#041E49</color>
+    <color name="primary_container">#E8E5FF</color>
+    <color name="on_primary_container">#1D0B7A</color>
 
-    <color name="secondary">#FABB05</color>
+    <color name="secondary">#FFA800</color>
     <color name="on_secondary">#1C1B1F</color>
-    <color name="secondary_container">#FFF0C0</color>
+    <color name="secondary_container">#FFEEC0</color>
 
-    <color name="background">#F8F9FA</color>
-    <color name="on_background">#202124</color>
+    <color name="background">#F4F6FA</color>
+    <color name="on_background">#1A1B24</color>
     <color name="surface">#FFFFFF</color>
-    <color name="on_surface">#202124</color>
-    <color name="surface_variant">#E8EAED</color>
-    <color name="on_surface_variant">#5F6368</color>
+    <color name="on_surface">#1A1B24</color>
+    <color name="surface_variant">#EAEBEE</color>
+    <color name="on_surface_variant">#606470</color>
 
-    <color name="error">#D93025</color>
+    <color name="error">#FF5A5A</color>
     <color name="on_error">#FFFFFF</color>
-    <color name="success">#1E8E3E</color>
-    <color name="warning">#F9AB00</color>
+    <color name="success">#2CDA9D</color>
+    <color name="warning">#FFA800</color>
 
-    <color name="outline">#DADCE0</color>
-    <color name="text_primary">#202124</color>
-    <color name="text_secondary">#5F6368</color>
+    <color name="outline">#E0E2E8</color>
+    <color name="text_primary">#1A1B24</color>
+    <color name="text_secondary">#606470</color>
 
     <!-- Module Specific -->
-    <color name="blood_red">#E53935</color>
-    <color name="ride_blue">#1976D2</color>
-    <color name="notes_green">#43A047</color>
-    <color name="lost_found_orange">#FB8C00</color>
+    <color name="blood_red">#FF5A5A</color>
+    <color name="ride_blue">#00B8D4</color>
+    <color name="notes_green">#4A3AFF</color>
+    <color name="lost_found_orange">#FFA800</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
 
     <!-- Dark theme colors -->
-    <color name="dark_primary">#8AB4F8</color>
-    <color name="dark_primary_dark">#669DF6</color>
-    <color name="dark_on_primary">#062E6F</color>
-    <color name="dark_primary_container">#0842A0</color>
+    <color name="dark_primary">#9C92FF</color>
+    <color name="dark_primary_dark">#4A3AFF</color>
+    <color name="dark_on_primary">#050040</color>
+    <color name="dark_primary_container">#2C2494</color>
+    <color name="dark_on_primary_container">#E8E5FF</color>
 
-    <color name="dark_background">#1F1F1F</color>
-    <color name="dark_on_background">#E3E3E3</color>
-    <color name="dark_surface">#2D2D2D</color>
-    <color name="dark_on_surface">#E3E3E3</color>
-    <color name="dark_surface_variant">#3C4043</color>
-    <color name="dark_on_surface_variant">#BDC1C6</color>
-    <color name="dark_outline">#5F6368</color>
+    <color name="dark_background">#12131C</color>
+    <color name="dark_on_background">#E6E6FA</color>
+    <color name="dark_surface">#1E1F2E</color>
+    <color name="dark_on_surface">#E6E6FA</color>
+    <color name="dark_surface_variant">#2E3042</color>
+    <color name="dark_on_surface_variant">#C2C4D6</color>
+    <color name="dark_outline">#474A61</color>
 </resources>
