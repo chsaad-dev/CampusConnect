@@ -13,7 +13,7 @@ import javax.inject.Inject
 class CompleteProfileUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    operator fun invoke(user: User): Flow<Resource<Unit>> {
-        return userRepository.completeProfile(user)
+    operator fun invoke(user: User, imageUri: android.net.Uri? = null): Flow<Resource<Unit>> {
+        return userRepository.completeProfile(user, imageUri)
     }
 }

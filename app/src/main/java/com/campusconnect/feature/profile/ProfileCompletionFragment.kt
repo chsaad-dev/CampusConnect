@@ -29,6 +29,18 @@ class ProfileCompletionFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ProfileCompletionViewModel by viewModels()
 
+    private var selectedImageUri: android.net.Uri? = null
+
+    private val imagePickerLauncher = registerForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.GetContent()
+    ) { uri: android.net.Uri? ->
+        if (uri != null) {
+            selectedImageUri = uri
+            binding.ivAvatarPreview.setImageURI(uri)
+            binding.ivAvatarPreview.visibility = View.VISIBLE
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -41,10 +53,17 @@ class ProfileCompletionFragment : Fragment() {
         setupUsernameCheck()
         setupSkillChips()
         setupInterestChips()
-        setupBloodGroupDropdown()
         setupDepartmentDropdown()
         setupSubmitButton()
         observeStates()
+
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.btnAvatarContainer.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
     }
 
     private fun setupUsernameCheck() {
@@ -85,16 +104,6 @@ class ProfileCompletionFragment : Fragment() {
         }
     }
 
-    private fun setupBloodGroupDropdown() {
-        val bloodGroups = arrayOf("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
-        val adapter = android.widget.ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_dropdown_item_1line,
-            bloodGroups
-        )
-        binding.actvBloodGroup.setAdapter(adapter)
-    }
-
     private fun setupDepartmentDropdown() {
         val departments = arrayOf(
             "Computer Science", "Electrical Engineering", "Mechanical Engineering",
@@ -116,7 +125,11 @@ class ProfileCompletionFragment : Fragment() {
             val department = binding.actvDepartment.text.toString().trim()
             val semesterText = binding.etSemester.text.toString().trim()
             val username = binding.etUsername.text.toString().trim().lowercase()
-            val bloodGroup = binding.actvBloodGroup.text.toString().trim()
+            
+            val checkedChipId = binding.chipGroupBloodGroup.checkedChipId
+            val bloodGroup = if (checkedChipId != View.NO_ID) {
+                binding.chipGroupBloodGroup.findViewById<Chip>(checkedChipId).text.toString()
+            } else ""
 
             var isValid = true
 
@@ -134,6 +147,11 @@ class ProfileCompletionFragment : Fragment() {
 
             if (!username.isValidUsername()) { binding.usernameLayout.error = "Invalid username"; isValid = false }
             else binding.usernameLayout.error = null
+
+            if (bloodGroup.isEmpty()) {
+                showErrorSnackbar("Please select a blood group.")
+                isValid = false
+            }
 
             if (!isValid) return@setOnClickListener
 
@@ -155,7 +173,8 @@ class ProfileCompletionFragment : Fragment() {
                 uniqueUsername = username,
                 bloodGroup = bloodGroup,
                 skills = selectedSkills,
-                interests = selectedInterests
+                interests = selectedInterests,
+                imageUri = selectedImageUri
             )
         }
     }

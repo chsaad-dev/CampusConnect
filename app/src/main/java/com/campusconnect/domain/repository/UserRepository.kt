@@ -13,7 +13,7 @@ interface UserRepository {
     fun updateProfile(user: User): Flow<Resource<Unit>>
     fun checkUsernameAvailability(username: String): Flow<Resource<Boolean>>
     fun claimUsername(uid: String, username: String): Flow<Resource<Unit>>
-    fun completeProfile(user: User): Flow<Resource<Unit>>
+    fun completeProfile(user: User, imageUri: android.net.Uri? = null): Flow<Resource<Unit>>
     fun isProfileComplete(uid: String): Flow<Resource<Boolean>>
     fun trackSubjectView(subject: String): Flow<Resource<Unit>>
 }

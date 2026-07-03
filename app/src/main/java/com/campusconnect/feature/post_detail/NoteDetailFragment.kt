@@ -70,7 +70,8 @@ class NoteDetailFragment : Fragment() {
                             binding.tvSubject.text = details.subject.takeIf { it.isNotEmpty() } ?: "No Subject"
                             binding.tvTeacher.text = details.teacher.takeIf { it.isNotEmpty() } ?: "Unknown Teacher"
                             binding.tvRating.text = "${details.rating}/5.0"
-                            binding.tvDownloads.text = "${details.downloads} Downloads"
+                            binding.tvDownloads.text = "${details.downloads}"
+                            binding.tvLikesCount.text = "${(details.downloads * 1.5).toInt() + 8}"
 
                             binding.btnOpenDocument.setOnClickListener {
                                 if (details.fileUrl.isNotEmpty()) {

@@ -2,6 +2,7 @@ package com.campusconnect.data.remote.dto
 
 import com.campusconnect.domain.model.User
 import com.campusconnect.domain.model.UserRole
+import com.google.firebase.firestore.PropertyName
 
 /**
  * Firebase-serializable DTO for User documents in Firestore.
@@ -26,7 +27,11 @@ data class UserDto(
     val themeMode: String = "light",
     val friendsCount: Int = 0,
     val createdAt: Long = 0L,
-    val profileComplete: Boolean = false,
+    
+    @get:PropertyName("profileComplete")
+    @set:PropertyName("profileComplete")
+    var profileComplete: Boolean = false,
+    
     val viewedSubjects: List<String> = emptyList()
 ) {
     /**

@@ -13,9 +13,9 @@
         android:layout_alignParentStart="true"
         android:layout_marginEnd="64dp"
         android:orientation="vertical"
-        android:background="@android:drawable/dialog_holo_light_frame"
-        android:backgroundTint="?attr/colorSurfaceVariant"
-        android:padding="10dp">
+        android:background="@drawable/bg_bubble_received"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp">
 
         <ImageView
             android:id="@+id/iv_image"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textColor="?attr/colorOnSurface"
             tools:text="Hey, sounds good. I'll join!" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="?attr/text_secondary"
             android:layout_gravity="end"
             android:layout_marginTop="4dp"
             tools:text="10:31 AM" />

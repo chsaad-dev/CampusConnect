@@ -48,7 +48,7 @@ class SettingsFragment : Fragment() {
         setupThemeToggle()
         setupLogout()
         setupMenuClickListeners()
-        checkAdminRole()
+        loadUserProfile()
     }
 
     private fun setupThemeToggle() {
@@ -95,12 +95,20 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun checkAdminRole() {
+    private fun loadUserProfile() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 userRepository.getCurrentUserProfile().collectLatest { resource ->
                     if (resource is Resource.Success) {
                         val user = resource.data
+                        binding.tvProfileName.text = user.name.takeIf { it.isNotEmpty() } ?: "User"
+                        binding.tvProfileDept.text = user.department.takeIf { it.isNotEmpty() } ?: "General Department"
+                        binding.tvProfileFriends.text = user.friendsCount.toString()
+                        binding.tvProfileReputation.text = user.reputationPoints.toString()
+                        binding.tvProfilePosts.text = "4"
+                        
+                        binding.viewProfileAvatar.loadAvatar(user.photoUrl)
+
                         if (user.role == UserRole.ADMIN) {
                             binding.cardAdmin.visibility = View.VISIBLE
                         } else {

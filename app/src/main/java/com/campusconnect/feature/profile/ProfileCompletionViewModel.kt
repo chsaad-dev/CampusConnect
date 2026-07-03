@@ -58,7 +58,8 @@ class ProfileCompletionViewModel @Inject constructor(
         uniqueUsername: String,
         bloodGroup: String,
         skills: List<String>,
-        interests: List<String>
+        interests: List<String>,
+        imageUri: android.net.Uri? = null
     ) {
         val uid = authRepository.getCurrentUid() ?: return
         val email = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email ?: ""
@@ -78,7 +79,7 @@ class ProfileCompletionViewModel @Inject constructor(
             profileComplete = true
         )
 
-        completeProfileUseCase(user).onEach { result ->
+        completeProfileUseCase(user, imageUri).onEach { result ->
             _completionState.value = result
         }.launchIn(viewModelScope)
     }

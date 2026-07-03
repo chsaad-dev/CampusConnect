@@ -34,6 +34,7 @@ class CreatePostFragment : Fragment() {
     private val viewModel: CreatePostViewModel by viewModels()
     private var selectedFileUri: Uri? = null
     private var selectedMediaType: MediaType = MediaType.NONE
+    private var currentPostType = PostType.NOTE
 
     // File Picker Launcher
     private val filePickerLauncher = registerForActivityResult(
@@ -73,23 +74,66 @@ class CreatePostFragment : Fragment() {
     }
 
     private fun setupTypeSelectors() {
-        binding.chipGroupType.setOnCheckedStateChangeListener { _, checkedIds ->
-            val checkedId = checkedIds.firstOrNull() ?: return@setOnCheckedStateChangeListener
-            
-            // Hide all dynamic layouts
-            binding.layoutFieldsNote.hide()
-            binding.layoutFieldsBlood.hide()
-            binding.layoutFieldsLostfound.hide()
-            binding.layoutFieldsRide.hide()
+        binding.cardTypeNote.setOnClickListener { selectPostType(PostType.NOTE) }
+        binding.cardTypeBlood.setOnClickListener { selectPostType(PostType.BLOOD) }
+        binding.cardTypeLostfound.setOnClickListener { selectPostType(PostType.LOST_FOUND) }
+        binding.cardTypeRide.setOnClickListener { selectPostType(PostType.RIDE) }
+        
+        // Default selection
+        selectPostType(PostType.NOTE)
+    }
 
-            // Show selected dynamic layout
-            when (checkedId) {
-                R.id.chip_note -> binding.layoutFieldsNote.show()
-                R.id.chip_blood -> binding.layoutFieldsBlood.show()
-                R.id.chip_lost_found -> binding.layoutFieldsLostfound.show()
-                R.id.chip_ride -> binding.layoutFieldsRide.show()
+    private fun selectPostType(type: PostType) {
+        currentPostType = type
+        
+        val outlineColor = requireContext().getColor(R.color.outline)
+        val defaultStrokeWidth = dpToPx(1)
+        val activeStrokeWidth = dpToPx(2)
+
+        // Reset card borders
+        binding.cardTypeNote.strokeColor = outlineColor
+        binding.cardTypeNote.strokeWidth = defaultStrokeWidth
+        binding.cardTypeBlood.strokeColor = outlineColor
+        binding.cardTypeBlood.strokeWidth = defaultStrokeWidth
+        binding.cardTypeLostfound.strokeColor = outlineColor
+        binding.cardTypeLostfound.strokeWidth = defaultStrokeWidth
+        binding.cardTypeRide.strokeColor = outlineColor
+        binding.cardTypeRide.strokeWidth = defaultStrokeWidth
+
+        // Hide all dynamic layouts
+        binding.layoutFieldsNote.hide()
+        binding.layoutFieldsBlood.hide()
+        binding.layoutFieldsLostfound.hide()
+        binding.layoutFieldsRide.hide()
+
+        // Highlight selected and show relevant inputs
+        when (type) {
+            PostType.NOTE -> {
+                binding.cardTypeNote.strokeColor = requireContext().getColor(R.color.primary)
+                binding.cardTypeNote.strokeWidth = activeStrokeWidth
+                binding.layoutFieldsNote.show()
+            }
+            PostType.BLOOD -> {
+                binding.cardTypeBlood.strokeColor = requireContext().getColor(R.color.blood_red)
+                binding.cardTypeBlood.strokeWidth = activeStrokeWidth
+                binding.layoutFieldsBlood.show()
+            }
+            PostType.LOST_FOUND -> {
+                binding.cardTypeLostfound.strokeColor = requireContext().getColor(R.color.lost_found_orange)
+                binding.cardTypeLostfound.strokeWidth = activeStrokeWidth
+                binding.layoutFieldsLostfound.show()
+            }
+            PostType.RIDE -> {
+                binding.cardTypeRide.strokeColor = requireContext().getColor(R.color.ride_blue)
+                binding.cardTypeRide.strokeWidth = activeStrokeWidth
+                binding.layoutFieldsRide.show()
             }
         }
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
     }
 
     private fun setupMediaPicker() {
@@ -140,12 +184,7 @@ class CreatePostFragment : Fragment() {
             }
             binding.captionLayout.error = null
 
-            val postType = when (binding.chipGroupType.checkedChipId) {
-                R.id.chip_blood -> PostType.BLOOD
-                R.id.chip_lost_found -> PostType.LOST_FOUND
-                R.id.chip_ride -> PostType.RIDE
-                else -> PostType.NOTE
-            }
+            val postType = currentPostType
 
             val extraData = mutableMapOf<String, Any>()
             when (postType) {
@@ -200,10 +239,10 @@ class CreatePostFragment : Fragment() {
                             showSnackbar("Post published successfully!")
 
                             val bundle = Bundle().apply {
-                                putString("post_type", when(binding.chipGroupType.checkedChipId) {
-                                    R.id.chip_blood -> "blood"
-                                    R.id.chip_lost_found -> "lost_found"
-                                    R.id.chip_ride -> "ride"
+                                putString("post_type", when(currentPostType) {
+                                    PostType.BLOOD -> "blood"
+                                    PostType.LOST_FOUND -> "lost_found"
+                                    PostType.RIDE -> "ride"
                                     else -> "note"
                                 })
                             }

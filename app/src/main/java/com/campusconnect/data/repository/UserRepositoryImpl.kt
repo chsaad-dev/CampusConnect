@@ -7,6 +7,7 @@ import com.campusconnect.domain.model.User
 import com.campusconnect.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val storage: FirebaseStorage
 ) : UserRepository {
 
     override fun getUserById(uid: String): Flow<Resource<User>> = flow {
@@ -103,10 +105,18 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun completeProfile(user: User): Flow<Resource<Unit>> = flow {
+    override fun completeProfile(user: User, imageUri: android.net.Uri?): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         try {
-            val dto = UserDto.fromDomain(user.copy(profileComplete = true))
+            var updatedUser = user.copy(profileComplete = true)
+            if (imageUri != null) {
+                val ref = storage.reference.child("avatars/${user.uid}.jpg")
+                ref.putFile(imageUri).await()
+                val url = ref.downloadUrl.await().toString()
+                updatedUser = updatedUser.copy(photoUrl = url)
+            }
+
+            val dto = UserDto.fromDomain(updatedUser)
             val batch = firestore.batch()
 
             // Write user document

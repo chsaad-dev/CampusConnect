@@ -13,9 +13,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="64dp"
         android:orientation="vertical"
-        android:background="@android:drawable/dialog_holo_light_frame"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        android:padding="10dp">
+        android:background="@drawable/bg_bubble_sent"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="10dp">
 
         <ImageView
             android:id="@+id/iv_image"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textColor="@color/white"
             tools:text="Hey, sounds good. I'll join!" />
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
-                android:textColor="?android:attr/textColorSecondary"
+                android:textColor="#D0FFFFFF"
                 tools:text="10:31 AM" />
 
             <TextView
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="#D0FFFFFF"
                 android:layout_marginStart="6dp"
                 tools:text="Seen" />
         </LinearLayout>
