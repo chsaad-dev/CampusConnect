@@ -96,14 +96,42 @@ class ComplaintRepositoryImpl @Inject constructor(
     ): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         try {
+            val complaintRef = firestore.collection(Constants.COLLECTION_COMPLAINTS).document(complaintId)
+            val snapshot = complaintRef.get().await()
+            val studentId = snapshot.getString("studentId") ?: ""
+            val category = snapshot.getString("category") ?: "Complaint"
+
+            val batch = firestore.batch()
             val updates = mutableMapOf<String, Any>(
                 "status" to status,
                 "duplicateOfId" to duplicateOfId
             )
-            firestore.collection(Constants.COLLECTION_COMPLAINTS)
-                .document(complaintId)
-                .update(updates)
-                .await()
+            batch.update(complaintRef, updates)
+
+            if (studentId.isNotEmpty()) {
+                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                    .document(studentId)
+                    .collection("items")
+                    .document()
+
+                val statusString = when (status) {
+                    "in_progress" -> "In Progress"
+                    "resolved" -> "Resolved"
+                    "duplicate" -> "Duplicate"
+                    else -> status.replaceFirstChar { it.uppercase() }
+                }
+
+                val notifItem = com.campusconnect.domain.model.NotificationItem(
+                    notifId = notifRef.id,
+                    title = "Complaint Status Updated",
+                    body = "Your complaint under '$category' has been updated to '$statusString'.",
+                    type = "complaint_status",
+                    refId = complaintId,
+                    createdAt = System.currentTimeMillis()
+                )
+                batch.set(notifRef, notifItem)
+            }
+            batch.commit().await()
 
             emit(Resource.Success(Unit))
         } catch (e: Exception) {

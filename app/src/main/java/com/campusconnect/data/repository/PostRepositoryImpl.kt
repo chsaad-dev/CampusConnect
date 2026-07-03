@@ -148,9 +148,123 @@ class PostRepositoryImpl @Inject constructor(
             }
 
             batch.commit().await()
+
+            // Trigger notification logs to matching target users
+            triggerPostNotifications(finalPost, extraData)
+
             emit(Resource.Success(Unit))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to create post"))
+        }
+    }
+
+    private suspend fun triggerPostNotifications(post: Post, extraData: Map<String, Any>) {
+        val uid = auth.currentUser?.uid ?: return
+        val batch = firestore.batch()
+        var hasNotifs = false
+
+        try {
+            when (post.type) {
+                PostType.NOTE -> {
+                    val dept = extraData["department"] as? String ?: ""
+                    if (dept.isNotEmpty()) {
+                        val snapshot = firestore.collection(Constants.COLLECTION_USERS)
+                            .whereEqualTo("department", dept)
+                            .get()
+                            .await()
+
+                        for (doc in snapshot.documents) {
+                            val targetUid = doc.id
+                            if (targetUid != uid) {
+                                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                                    .document(targetUid)
+                                    .collection("items")
+                                    .document()
+
+                                val notif = com.campusconnect.domain.model.NotificationItem(
+                                    notifId = notifRef.id,
+                                    title = "New Notes Shared",
+                                    body = "New study notes for '${extraData["subject"] ?: "your course"}' are available in your department.",
+                                    type = "note",
+                                    refId = post.postId,
+                                    createdAt = System.currentTimeMillis()
+                                )
+                                batch.set(notifRef, notif)
+                                hasNotifs = true
+                            }
+                        }
+                    }
+                }
+                PostType.BLOOD -> {
+                    val bloodGroup = extraData["bloodGroup"] as? String ?: ""
+                    if (bloodGroup.isNotEmpty()) {
+                        val snapshot = firestore.collection(Constants.COLLECTION_USERS)
+                            .whereEqualTo("bloodGroup", bloodGroup)
+                            .get()
+                            .await()
+
+                        for (doc in snapshot.documents) {
+                            val targetUid = doc.id
+                            if (targetUid != uid) {
+                                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                                    .document(targetUid)
+                                    .collection("items")
+                                    .document()
+
+                                val notif = com.campusconnect.domain.model.NotificationItem(
+                                    notifId = notifRef.id,
+                                    title = "URGENT: Blood Request",
+                                    body = "A blood request for group '$bloodGroup' has been posted at ${extraData["hospital"] ?: "nearby hospital"}.",
+                                    type = "blood_request",
+                                    refId = post.postId,
+                                    createdAt = System.currentTimeMillis()
+                                )
+                                batch.set(notifRef, notif)
+                                hasNotifs = true
+                            }
+                        }
+                    }
+                }
+                PostType.RIDE -> {
+                    // Notify users in driver's department
+                    val driverDoc = firestore.collection(Constants.COLLECTION_USERS).document(uid).get().await()
+                    val dept = driverDoc.getString("department") ?: ""
+                    if (dept.isNotEmpty()) {
+                        val snapshot = firestore.collection(Constants.COLLECTION_USERS)
+                            .whereEqualTo("department", dept)
+                            .get()
+                            .await()
+
+                        for (doc in snapshot.documents) {
+                            val targetUid = doc.id
+                            if (targetUid != uid) {
+                                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                                    .document(targetUid)
+                                    .collection("items")
+                                    .document()
+
+                                val notif = com.campusconnect.domain.model.NotificationItem(
+                                    notifId = notifRef.id,
+                                    title = "New Ride Shared",
+                                    body = "${post.authorName} offered a ride: ${extraData["from"]} -> ${extraData["to"]}.",
+                                    type = "ride",
+                                    refId = post.postId,
+                                    createdAt = System.currentTimeMillis()
+                                )
+                                batch.set(notifRef, notif)
+                                hasNotifs = true
+                            }
+                        }
+                    }
+                }
+                else -> {}
+            }
+
+            if (hasNotifs) {
+                batch.commit().await()
+            }
+        } catch (e: Exception) {
+            // Log or ignore notification failure to prevent blocking post creation
         }
     }
 

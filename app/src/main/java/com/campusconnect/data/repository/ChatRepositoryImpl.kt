@@ -114,6 +114,28 @@ class ChatRepositoryImpl @Inject constructor(
                 )
             )
 
+            // Write notification log to recipient
+            val recipientUid = chatId.split("_").firstOrNull { it != uid } ?: ""
+            if (recipientUid.isNotEmpty()) {
+                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                    .document(recipientUid)
+                    .collection("items")
+                    .document()
+
+                val senderDoc = firestore.collection(Constants.COLLECTION_USERS).document(uid).get().await()
+                val senderName = senderDoc.getString("name") ?: "CampusConnect User"
+
+                val notifItem = com.campusconnect.domain.model.NotificationItem(
+                    notifId = notifRef.id,
+                    title = "New message from $senderName",
+                    body = if (uploadUrl.isNotEmpty()) "Sent an attachment" else text,
+                    type = "chat_message",
+                    refId = chatId,
+                    createdAt = message.createdAt
+                )
+                batch.set(notifRef, notifItem)
+            }
+
             batch.commit().await()
             emit(Resource.Success(Unit))
         } catch (e: Exception) {

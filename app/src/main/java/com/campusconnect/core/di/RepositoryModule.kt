@@ -6,6 +6,7 @@ import com.campusconnect.data.repository.ComplaintRepositoryImpl
 import com.campusconnect.data.repository.EventRepositoryImpl
 import com.campusconnect.data.repository.FriendRepositoryImpl
 import com.campusconnect.data.repository.JobRepositoryImpl
+import com.campusconnect.data.repository.NotificationRepositoryImpl
 import com.campusconnect.data.repository.PostRepositoryImpl
 import com.campusconnect.data.repository.UserRepositoryImpl
 import com.campusconnect.domain.repository.AuthRepository
@@ -14,6 +15,7 @@ import com.campusconnect.domain.repository.ComplaintRepository
 import com.campusconnect.domain.repository.EventRepository
 import com.campusconnect.domain.repository.FriendRepository
 import com.campusconnect.domain.repository.JobRepository
+import com.campusconnect.domain.repository.NotificationRepository
 import com.campusconnect.domain.repository.PostRepository
 import com.campusconnect.domain.repository.UserRepository
 import dagger.Binds
@@ -73,4 +75,10 @@ abstract class RepositoryModule {
     abstract fun bindJobRepository(
         impl: JobRepositoryImpl
     ): JobRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNotificationRepository(
+        impl: NotificationRepositoryImpl
+    ): NotificationRepository
 }

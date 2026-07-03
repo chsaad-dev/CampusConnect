@@ -47,11 +47,29 @@ class JobRepositoryImpl @Inject constructor(
                 createdAt = System.currentTimeMillis()
             )
 
-            firestore.collection(Constants.COLLECTION_JOBS)
-                .document(jobId)
-                .set(finalJob)
-                .await()
+            val usersSnapshot = firestore.collection(Constants.COLLECTION_USERS).get().await()
+            val batch = firestore.batch()
+            batch.set(firestore.collection(Constants.COLLECTION_JOBS).document(jobId), finalJob)
 
+            for (doc in usersSnapshot.documents) {
+                val targetUid = doc.id
+                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                    .document(targetUid)
+                    .collection("items")
+                    .document()
+
+                val notifItem = com.campusconnect.domain.model.NotificationItem(
+                    notifId = notifRef.id,
+                    title = "New Placement/Job Drive",
+                    body = "${finalJob.companyName} is hiring for ${finalJob.title} (${finalJob.type}).",
+                    type = "job",
+                    refId = jobId,
+                    createdAt = System.currentTimeMillis()
+                )
+                batch.set(notifRef, notifItem)
+            }
+
+            batch.commit().await()
             emit(Resource.Success(Unit))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to create job"))

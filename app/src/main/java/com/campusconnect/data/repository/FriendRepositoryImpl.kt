@@ -91,10 +91,29 @@ class FriendRepositoryImpl @Inject constructor(
                 createdAt = System.currentTimeMillis()
             )
 
-            firestore.collection(Constants.COLLECTION_FRIEND_REQUESTS)
-                .document(requestId)
-                .set(request)
-                .await()
+            val batch = firestore.batch()
+            batch.set(
+                firestore.collection(Constants.COLLECTION_FRIEND_REQUESTS).document(requestId),
+                request
+            )
+
+            // Write notification log to recipient
+            val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                .document(toUser.uid)
+                .collection("items")
+                .document()
+
+            val notifItem = com.campusconnect.domain.model.NotificationItem(
+                notifId = notifRef.id,
+                title = "New Friend Request",
+                body = "${senderDto.name} (@${senderDto.uniqueUsername}) sent you a friend request.",
+                type = "friend_request",
+                refId = fromUid,
+                createdAt = request.createdAt
+            )
+            batch.set(notifRef, notifItem)
+
+            batch.commit().await()
 
             emit(Resource.Success(Unit))
         } catch (e: Exception) {
@@ -192,6 +211,22 @@ class FriendRepositoryImpl @Inject constructor(
 
             batch.update(userARef, "friendsCount", FieldValue.increment(1))
             batch.update(userBRef, "friendsCount", FieldValue.increment(1))
+
+            // 4. Write notification to request sender
+            val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                .document(request.fromUid)
+                .collection("items")
+                .document()
+
+            val notifItem = com.campusconnect.domain.model.NotificationItem(
+                notifId = notifRef.id,
+                title = "Friend Request Accepted",
+                body = "${request.toName} (@${request.toUsername}) accepted your friend request.",
+                type = "friend_request",
+                refId = request.toUid,
+                createdAt = System.currentTimeMillis()
+            )
+            batch.set(notifRef, notifItem)
 
             batch.commit().await()
             emit(Resource.Success(Unit))

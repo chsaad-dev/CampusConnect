@@ -92,11 +92,29 @@ class EventRepositoryImpl @Inject constructor(
                 createdAt = System.currentTimeMillis()
             )
 
-            firestore.collection(Constants.COLLECTION_EVENTS)
-                .document(eventId)
-                .set(finalEvent)
-                .await()
+            val usersSnapshot = firestore.collection(Constants.COLLECTION_USERS).get().await()
+            val batch = firestore.batch()
+            batch.set(firestore.collection(Constants.COLLECTION_EVENTS).document(eventId), finalEvent)
 
+            for (doc in usersSnapshot.documents) {
+                val targetUid = doc.id
+                val notifRef = firestore.collection(Constants.COLLECTION_NOTIFICATIONS)
+                    .document(targetUid)
+                    .collection("items")
+                    .document()
+
+                val notifItem = com.campusconnect.domain.model.NotificationItem(
+                    notifId = notifRef.id,
+                    title = "New Campus Event: ${finalEvent.title}",
+                    body = "${finalEvent.hostType} is hosting an event at ${finalEvent.location}.",
+                    type = "event",
+                    refId = eventId,
+                    createdAt = System.currentTimeMillis()
+                )
+                batch.set(notifRef, notifItem)
+            }
+
+            batch.commit().await()
             emit(Resource.Success(Unit))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to create event"))
