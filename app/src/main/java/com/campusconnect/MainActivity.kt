@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         // Show/hide bottom nav based on current destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.settingsFragment -> {
+                R.id.homeFragment, R.id.settingsFragment, R.id.friendsFragment, R.id.chatListFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
                 }
                 else -> {

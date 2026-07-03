@@ -70,8 +70,11 @@ class BloodRequestDetailFragment : Fragment() {
                             binding.tvHospital.text = details.hospital.takeIf { it.isNotEmpty() } ?: "Unknown Hospital"
 
                             binding.btnAcceptRequest.setOnClickListener {
-                                showSnackbar("Navigating to chat/contact...")
-                                // TODO: Implement chat/contact intent
+                                val bundle = Bundle().apply {
+                                    putString("targetUid", details.requesterId)
+                                    putString("targetName", "Requester")
+                                }
+                                findNavController().navigate(R.id.action_bloodRequestDetailFragment_to_chatFragment, bundle)
                             }
                         }
                         is Resource.Error -> {
