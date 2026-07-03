@@ -1,8 +1,6 @@
 package com.campusconnect.core.theme
 
-/**
- * Theme mode enum. The app uses manual user toggle only — never follows system dark mode.
- */
+
 enum class ThemeMode {
     LIGHT,
     DARK;
