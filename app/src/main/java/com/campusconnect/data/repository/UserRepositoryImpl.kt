@@ -106,7 +106,7 @@ class UserRepositoryImpl @Inject constructor(
     override fun completeProfile(user: User): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         try {
-            val dto = UserDto.fromDomain(user.copy(isProfileComplete = true))
+            val dto = UserDto.fromDomain(user.copy(profileComplete = true))
             val batch = firestore.batch()
 
             // Write user document
@@ -138,7 +138,7 @@ class UserRepositoryImpl @Inject constructor(
                 return@flow
             }
 
-            val isComplete = doc.getBoolean("isProfileComplete") ?: false
+            val isComplete = doc.getBoolean("profileComplete") ?: false
             emit(Resource.Success(isComplete))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to check profile status"))

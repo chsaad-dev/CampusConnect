@@ -75,7 +75,7 @@ class ProfileCompletionViewModel @Inject constructor(
             skills = skills,
             interests = interests,
             createdAt = System.currentTimeMillis(),
-            isProfileComplete = true
+            profileComplete = true
         )
 
         completeProfileUseCase(user).onEach { result ->

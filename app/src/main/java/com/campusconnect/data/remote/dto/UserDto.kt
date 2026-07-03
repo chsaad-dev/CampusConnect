@@ -26,7 +26,7 @@ data class UserDto(
     val themeMode: String = "light",
     val friendsCount: Int = 0,
     val createdAt: Long = 0L,
-    val isProfileComplete: Boolean = false,
+    val profileComplete: Boolean = false,
     val viewedSubjects: List<String> = emptyList()
 ) {
     /**
@@ -51,7 +51,7 @@ data class UserDto(
         themeMode = themeMode,
         friendsCount = friendsCount,
         createdAt = createdAt,
-        isProfileComplete = isProfileComplete,
+        profileComplete = profileComplete,
         viewedSubjects = viewedSubjects
     )
 
@@ -78,7 +78,7 @@ data class UserDto(
             themeMode = user.themeMode,
             friendsCount = user.friendsCount,
             createdAt = user.createdAt,
-            isProfileComplete = user.isProfileComplete,
+            profileComplete = user.profileComplete,
             viewedSubjects = user.viewedSubjects
         )
     }
