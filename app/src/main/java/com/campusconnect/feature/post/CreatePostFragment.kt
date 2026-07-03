@@ -147,7 +147,31 @@ class CreatePostFragment : Fragment() {
                 else -> PostType.NOTE
             }
 
-            // In Phase 2 we use the user's department or "General"
+            val extraData = mutableMapOf<String, Any>()
+            when (postType) {
+                PostType.NOTE -> {
+                    extraData["subject"] = binding.etNoteSubject.text.toString().trim()
+                    extraData["teacher"] = binding.etNoteTeacher.text.toString().trim()
+                }
+                PostType.BLOOD -> {
+                    extraData["hospital"] = binding.etBloodHospital.text.toString().trim()
+                    extraData["bloodGroup"] = binding.actvBloodGroup.text.toString().trim()
+                    extraData["urgency"] = binding.actvBloodUrgency.text.toString().trim()
+                }
+                PostType.LOST_FOUND -> {
+                    extraData["itemName"] = binding.etLfItemName.text.toString().trim()
+                    extraData["category"] = binding.etLfCategory.text.toString().trim()
+                    extraData["location"] = binding.etLfLocation.text.toString().trim()
+                }
+                PostType.RIDE -> {
+                    extraData["from"] = binding.etRideFrom.text.toString().trim()
+                    extraData["to"] = binding.etRideTo.text.toString().trim()
+                    extraData["seatsTotal"] = binding.etRideSeats.text.toString().toIntOrNull() ?: 0
+                    extraData["seatsLeft"] = binding.etRideSeats.text.toString().toIntOrNull() ?: 0
+                    extraData["cost"] = binding.etRideCost.text.toString().trim()
+                }
+            }
+
             val department = "General"
 
             viewModel.createPost(
@@ -155,7 +179,8 @@ class CreatePostFragment : Fragment() {
                 type = postType,
                 mediaType = selectedMediaType,
                 fileUri = selectedFileUri,
-                department = department
+                department = department,
+                extraData = extraData
             )
         }
     }
