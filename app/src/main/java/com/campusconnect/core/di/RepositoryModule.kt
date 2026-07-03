@@ -1,9 +1,13 @@
 package com.campusconnect.core.di
 
 import com.campusconnect.data.repository.AuthRepositoryImpl
+import com.campusconnect.data.repository.ChatRepositoryImpl
+import com.campusconnect.data.repository.FriendRepositoryImpl
 import com.campusconnect.data.repository.PostRepositoryImpl
 import com.campusconnect.data.repository.UserRepositoryImpl
 import com.campusconnect.domain.repository.AuthRepository
+import com.campusconnect.domain.repository.ChatRepository
+import com.campusconnect.domain.repository.FriendRepository
 import com.campusconnect.domain.repository.PostRepository
 import com.campusconnect.domain.repository.UserRepository
 import dagger.Binds
@@ -33,4 +37,16 @@ abstract class RepositoryModule {
     abstract fun bindPostRepository(
         impl: PostRepositoryImpl
     ): PostRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFriendRepository(
+        impl: FriendRepositoryImpl
+    ): FriendRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindChatRepository(
+        impl: ChatRepositoryImpl
+    ): ChatRepository
 }

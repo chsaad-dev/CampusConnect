@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.campusconnect.R
 import com.campusconnect.core.common.Resource
 import com.campusconnect.core.common.hide
 import com.campusconnect.core.common.show
@@ -70,7 +71,11 @@ class LostFoundDetailFragment : Fragment() {
                             binding.tvLocation.text = details.location.takeIf { it.isNotEmpty() } ?: "Unknown Location"
 
                             binding.btnContactOwner.setOnClickListener {
-                                showSnackbar("Navigating to chat/contact...")
+                                val bundle = Bundle().apply {
+                                    putString("targetUid", details.ownerId)
+                                    putString("targetName", "Item Owner")
+                                }
+                                findNavController().navigate(R.id.action_lostFoundDetailFragment_to_chatFragment, bundle)
                             }
                         }
                         is Resource.Error -> {

@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.campusconnect.R
 import com.campusconnect.core.common.Resource
 import com.campusconnect.core.common.hide
 import com.campusconnect.core.common.show

@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.campusconnect.R
 import com.campusconnect.core.common.Resource
 import com.campusconnect.core.common.hide
 import com.campusconnect.core.common.show
@@ -71,7 +72,11 @@ class RideDetailFragment : Fragment() {
                             binding.tvCost.text = details.cost.takeIf { it.isNotEmpty() } ?: "Free"
 
                             binding.btnRequestSeat.setOnClickListener {
-                                showSnackbar("Seat request sent to driver!")
+                                val bundle = Bundle().apply {
+                                    putString("targetUid", details.driverId)
+                                    putString("targetName", "Driver")
+                                }
+                                findNavController().navigate(R.id.action_rideDetailFragment_to_chatFragment, bundle)
                             }
                         }
                         is Resource.Error -> {
