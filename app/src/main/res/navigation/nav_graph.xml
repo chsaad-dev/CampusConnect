@@ -176,6 +176,13 @@
             <argument
                 android:name="postId"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_bloodRequestDetailFragment_to_chatFragment"
+                app:destination="@id/chatFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
         </fragment>
 
         <fragment
@@ -186,6 +193,13 @@
             <argument
                 android:name="postId"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_lostFoundDetailFragment_to_chatFragment"
+                app:destination="@id/chatFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
         </fragment>
 
         <fragment
@@ -195,6 +209,54 @@
             tools:layout="@layout/fragment_ride_detail">
             <argument
                 android:name="postId"
+                app:argType="string" />
+            <action
+                android:id="@+id/action_rideDetailFragment_to_chatFragment"
+                app:destination="@id/chatFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/friendsFragment"
+            android:name="com.campusconnect.feature.friends.FriendsFragment"
+            android:label="Friends"
+            tools:layout="@layout/fragment_friends">
+            <action
+                android:id="@+id/action_friendsFragment_to_chatFragment"
+                app:destination="@id/chatFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/chatListFragment"
+            android:name="com.campusconnect.feature.chat.ChatListFragment"
+            android:label="Chats"
+            tools:layout="@layout/fragment_chat_list">
+            <action
+                android:id="@+id/action_chatListFragment_to_chatFragment"
+                app:destination="@id/chatFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/chatFragment"
+            android:name="com.campusconnect.feature.chat.ChatFragment"
+            android:label="Chat"
+            tools:layout="@layout/fragment_chat">
+            <argument
+                android:name="targetUid"
+                app:argType="string" />
+            <argument
+                android:name="targetName"
                 app:argType="string" />
         </fragment>
 

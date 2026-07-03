@@ -5,6 +5,14 @@
         android:icon="@android:drawable/ic_menu_today"
         android:title="@string/menu_home" />
     <item
+        android:id="@+id/friendsFragment"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/menu_friends" />
+    <item
+        android:id="@+id/chatListFragment"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="@string/menu_chats" />
+    <item
         android:id="@+id/settingsFragment"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/menu_settings" />
