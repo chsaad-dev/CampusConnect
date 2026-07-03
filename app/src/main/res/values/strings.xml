@@ -1,3 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CampusConnect</string>
+    <string name="tagline">One App for Every Student Need</string>
+
+    <!-- Auth -->
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="register_now">Register Now</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password_title">Reset Password</string>
+    <string name="forgot_password_subtitle">Enter your email and we\'ll send you a link to reset your password.</string>
+    <string name="send_reset_link">Send Reset Link</string>
+    <string name="back_to_login">← Back to Login</string>
+    <string name="no_account">Don\'t have an account? </string>
+    <string name="have_account">Already have an account? </string>
+    <string name="register_subtitle">Sign up with your university email</string>
+    <string name="logout">Logout</string>
+
+    <!-- Email Verification -->
+    <string name="email_verification">Email Verification</string>
+    <string name="verify_your_email">Verify Your Email</string>
+    <string name="verification_instructions">We\'ve sent a verification link to your email. Please verify your email to continue.</string>
+    <string name="ive_verified">I\'ve Verified My Email</string>
+    <string name="resend_email">Resend Verification Email</string>
+    <string name="email_icon">Email icon</string>
+
+    <!-- Profile Completion -->
+    <string name="complete_profile">Complete Profile</string>
+    <string name="profile_subtitle">Tell us about yourself to get started</string>
+
+    <!-- Hints -->
+    <string name="hint_email">Email</string>
+    <string name="hint_university_email">University Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="hint_full_name">Full Name</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_roll_number">Roll Number</string>
+    <string name="hint_department">Department</string>
+    <string name="hint_semester">Semester</string>
+    <string name="hint_blood_group">Blood Group</string>
+
+    <!-- Labels -->
+    <string name="label_skills">Skills</string>
+    <string name="label_interests">Interests</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="theme_description">Toggle between light and dark appearance</string>
+
+    <!-- Menu -->
+    <string name="menu_home">Home</string>
+    <string name="menu_settings">Settings</string>
+
+    <!-- Home -->
+    <string name="welcome">Welcome to CampusConnect!</string>
+    <string name="feed_coming_soon">Feed coming in Phase 2</string>
 </resources>

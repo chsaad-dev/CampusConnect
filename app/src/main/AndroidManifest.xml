@@ -24,9 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CampusConnect">
 
-        <!-- Splash / Login Activity (launcher) -->
+        <!-- Single Activity (launcher) -->
         <activity
-            android:name=".ui.auth.LoginActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.CampusConnect">
@@ -36,29 +36,9 @@
             </intent-filter>
         </activity>
 
-        <!-- Register Activity -->
-        <activity
-            android:name=".ui.auth.RegisterActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.CampusConnect" />
-
-        <!-- Forgot Password Activity -->
-        <activity
-            android:name=".ui.auth.ForgotPasswordActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Theme.CampusConnect" />
-
-        <!-- Main Activity (home after login) -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.CampusConnect" />
-
         <!-- FCM Service -->
         <service
-            android:name=".service.MyFirebaseMessagingService"
+            android:name=".data.remote.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -16,8 +16,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 firebaseBom = "33.6.0"
-hilt = "2.52"
-coil = "2.7.0"
+hilt = "2.55"
 coroutines = "1.9.0"
 room = "2.6.1"
 zxing = "3.5.3"
@@ -27,6 +26,7 @@ circleimageview = "3.1.0"
 swiperefresh = "1.1.0"
 lottie = "6.4.1"
 shimmer = "0.5.0"
+datastore = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,7 +55,6 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 
@@ -76,6 +75,8 @@ circleimageview = { group = "de.hdodenhof", name = "circleimageview", version.re
 swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefresh" }
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 shimmer = { group = "com.facebook.shimmer", name = "shimmer", version.ref = "shimmer" }
+
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

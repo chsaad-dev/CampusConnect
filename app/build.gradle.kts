@@ -12,11 +12,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.campusconnect"
+    namespace = "com.campusconnect"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.campusconnect"
+        applicationId = "com.campusconnect"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.swiperefreshlayout)
+
+    // DataStore
+    implementation(libs.datastore.preferences)
 
     // Firebase
     implementation(platform(libs.firebase.bom))

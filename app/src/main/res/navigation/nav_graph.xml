@@ -3,66 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/nav_home">
+    app:startDestination="@id/auth_nav_graph">
 
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.campusconnect.ui.home.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" />
+    <!-- ======================== AUTH NAV GRAPH ======================== -->
+    <navigation
+        android:id="@+id/auth_nav_graph"
+        app:startDestination="@id/loginFragment">
 
-    <fragment
-        android:id="@+id/nav_notes"
-        android:name="com.example.campusconnect.ui.notes.NotesFragment"
-        android:label="Notes"
-        tools:layout="@layout/fragment_notes" />
+        <fragment
+            android:id="@+id/loginFragment"
+            android:name="com.campusconnect.feature.auth.LoginFragment"
+            android:label="Login"
+            tools:layout="@layout/fragment_login">
 
-    <fragment
-        android:id="@+id/nav_lost_found"
-        android:name="com.example.campusconnect.ui.lostfound.LostFoundFragment"
-        android:label="Lost &amp; Found"
-        tools:layout="@layout/fragment_lost_found" />
+            <action
+                android:id="@+id/action_loginFragment_to_registerFragment"
+                app:destination="@id/registerFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
 
-    <fragment
-        android:id="@+id/nav_rides"
-        android:name="com.example.campusconnect.ui.rides.RidesFragment"
-        android:label="Rides"
-        tools:layout="@layout/fragment_rides" />
+            <action
+                android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+                app:destination="@id/forgotPasswordFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
 
-    <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.example.campusconnect.ui.profile.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+            <action
+                android:id="@+id/action_loginFragment_to_mainNavGraph"
+                app:destination="@id/main_nav_graph"
+                app:popUpTo="@id/auth_nav_graph"
+                app:popUpToInclusive="true" />
 
-    <fragment
-        android:id="@+id/nav_blood_donation"
-        android:name="com.example.campusconnect.ui.blood.BloodDonationFragment"
-        android:label="Blood Donation"
-        tools:layout="@layout/fragment_blood_donation" />
+            <action
+                android:id="@+id/action_loginFragment_to_profileCompletionFragment"
+                app:destination="@id/profileCompletionFragment"
+                app:popUpTo="@id/loginFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
 
-    <fragment
-        android:id="@+id/nav_complaints"
-        android:name="com.example.campusconnect.ui.complaints.ComplaintsFragment"
-        android:label="Complaints"
-        tools:layout="@layout/fragment_complaints" />
+        <fragment
+            android:id="@+id/registerFragment"
+            android:name="com.campusconnect.feature.auth.RegisterFragment"
+            android:label="Register"
+            tools:layout="@layout/fragment_register">
 
-    <fragment
-        android:id="@+id/nav_events"
-        android:name="com.example.campusconnect.ui.events.EventsFragment"
-        android:label="Events"
-        tools:layout="@layout/fragment_events" />
+            <action
+                android:id="@+id/action_registerFragment_to_emailVerificationFragment"
+                app:destination="@id/emailVerificationFragment"
+                app:popUpTo="@id/registerFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
 
-    <fragment
-        android:id="@+id/nav_jobs"
-        android:name="com.example.campusconnect.ui.jobs.JobsFragment"
-        android:label="Jobs"
-        tools:layout="@layout/fragment_jobs" />
+        <fragment
+            android:id="@+id/forgotPasswordFragment"
+            android:name="com.campusconnect.feature.auth.ForgotPasswordFragment"
+            android:label="Forgot Password"
+            tools:layout="@layout/fragment_forgot_password" />
 
-    <fragment
-        android:id="@+id/nav_chat"
-        android:name="com.example.campusconnect.ui.chat.ChatFragment"
-        android:label="Messages"
-        tools:layout="@layout/fragment_chat" />
+        <fragment
+            android:id="@+id/emailVerificationFragment"
+            android:name="com.campusconnect.feature.auth.EmailVerificationFragment"
+            android:label="Verify Email"
+            tools:layout="@layout/fragment_email_verification">
+
+            <action
+                android:id="@+id/action_emailVerificationFragment_to_profileCompletionFragment"
+                app:destination="@id/profileCompletionFragment"
+                app:popUpTo="@id/emailVerificationFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
+
+        <fragment
+            android:id="@+id/profileCompletionFragment"
+            android:name="com.campusconnect.feature.profile.ProfileCompletionFragment"
+            android:label="Complete Profile"
+            tools:layout="@layout/fragment_profile_completion">
+
+            <action
+                android:id="@+id/action_profileCompletionFragment_to_mainNavGraph"
+                app:destination="@id/main_nav_graph"
+                app:popUpTo="@id/auth_nav_graph"
+                app:popUpToInclusive="true" />
+        </fragment>
+
+    </navigation>
+
+    <!-- ======================== MAIN NAV GRAPH ======================== -->
+    <navigation
+        android:id="@+id/main_nav_graph"
+        app:startDestination="@id/homeFragment">
+
+        <fragment
+            android:id="@+id/homeFragment"
+            android:name="com.campusconnect.feature.feed.HomeFragment"
+            android:label="Home"
+            tools:layout="@layout/fragment_home" />
+
+        <fragment
+            android:id="@+id/settingsFragment"
+            android:name="com.campusconnect.feature.settings.SettingsFragment"
+            android:label="Settings"
+            tools:layout="@layout/fragment_settings">
+
+            <action
+                android:id="@+id/action_settingsFragment_to_authNavGraph"
+                app:destination="@id/auth_nav_graph"
+                app:popUpTo="@id/main_nav_graph"
+                app:popUpToInclusive="true" />
+        </fragment>
+
+    </navigation>
 
 </navigation>
