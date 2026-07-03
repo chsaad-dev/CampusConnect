@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Custom Attributes for EmptyStateView -->
+    <declare-styleable name="EmptyStateView">
+        <attr name="emptyIcon" format="reference" />
+        <attr name="emptyTitle" format="string" />
+        <attr name="emptyDescription" format="string" />
+        <attr name="emptyActionText" format="string" />
+    </declare-styleable>
+
+    <!-- Custom Attributes for UserAvatarView -->
+    <declare-styleable name="UserAvatarView">
+        <attr name="avatarSize" format="dimension" />
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+    </declare-styleable>
+</resources>
