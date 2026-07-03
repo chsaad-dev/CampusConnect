@@ -85,6 +85,7 @@ class JobDetailFragment : Fragment() {
                                     try {
                                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(job.applyLink))
                                         startActivity(intent)
+                                        com.campusconnect.core.common.AnalyticsHelper.logJobApply(job.jobId, job.title)
                                     } catch (e: Exception) {
                                         showErrorSnackbar("Invalid application link.")
                                     }

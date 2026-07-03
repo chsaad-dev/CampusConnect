@@ -95,6 +95,10 @@ class RegisterFragment : Fragment() {
                             binding.progressBar.hide()
                             binding.btnRegister.isEnabled = true
                             viewModel.resetRegisterState()
+
+                            val currentUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                            com.campusconnect.core.common.AnalyticsHelper.logRegistration(currentUid, "student")
+
                             // Send verification email after registration
                             viewModel.sendVerificationEmail()
                             // Navigate to email verification screen

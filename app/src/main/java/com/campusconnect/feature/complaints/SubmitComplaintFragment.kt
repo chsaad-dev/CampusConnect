@@ -166,6 +166,8 @@ class SubmitComplaintFragment : Fragment() {
                             binding.progressBar.hide()
                             binding.btnSubmit.isEnabled = true
                             showSnackbar("Complaint submitted successfully!")
+                            val cat = binding.actvCategory.text.toString().trim()
+                            com.campusconnect.core.common.AnalyticsHelper.logComplaintSubmitted(cat)
                             viewModel.resetSubmitState()
                             findNavController().navigateUp()
                         }

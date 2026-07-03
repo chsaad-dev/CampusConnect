@@ -88,6 +88,8 @@ class LoginFragment : Fragment() {
                             viewModel.resetLoginState()
 
                             val user = state.data
+                            com.campusconnect.core.common.AnalyticsHelper.logLogin(user.uid)
+
                             if (user.isProfileComplete) {
                                 // Navigate to main app
                                 findNavController().navigate(R.id.action_loginFragment_to_mainNavGraph)

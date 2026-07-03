@@ -59,6 +59,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        com.campusconnect.core.common.AnalyticsHelper.initialize(applicationContext)
+        com.campusconnect.core.common.AnalyticsHelper.logEvent("app_session_start")
+
         setupNavigation()
         checkNotificationPermission()
         handleNotificationIntent(intent)

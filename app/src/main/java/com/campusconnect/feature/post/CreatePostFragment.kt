@@ -198,6 +198,17 @@ class CreatePostFragment : Fragment() {
                             binding.progressBar.hide()
                             binding.btnSubmitPost.isEnabled = true
                             showSnackbar("Post published successfully!")
+
+                            val bundle = Bundle().apply {
+                                putString("post_type", when(binding.chipGroupType.checkedChipId) {
+                                    R.id.chip_blood -> "blood"
+                                    R.id.chip_lost_found -> "lost_found"
+                                    R.id.chip_ride -> "ride"
+                                    else -> "note"
+                                })
+                            }
+                            com.campusconnect.core.common.AnalyticsHelper.logEvent("post_created", bundle)
+
                             viewModel.resetUploadState()
                             findNavController().navigateUp()
                         }

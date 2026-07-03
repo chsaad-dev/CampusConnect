@@ -118,6 +118,8 @@ class EventDetailFragment : Fragment() {
                             is Resource.Success -> {
                                 binding.btnRegister.isEnabled = true
                                 showSnackbar("Successfully registered!")
+                                val eventTitle = (viewModel.eventDetail.value as? Resource.Success)?.data?.title ?: "Event"
+                                com.campusconnect.core.common.AnalyticsHelper.logEventRegistration(eventId, eventTitle)
                                 viewModel.resetRegisterState()
                             }
                             is Resource.Error -> {

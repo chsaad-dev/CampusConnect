@@ -28,8 +28,23 @@ class PostAdapter(
         return PostViewHolder(binding)
     }
 
+    private var lastAnimatedPosition = -1
+
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         holder.bind(getItem(position))
+        setEntranceAnimation(holder.itemView, position)
+    }
+
+    private fun setEntranceAnimation(view: View, position: Int) {
+        if (position > lastAnimatedPosition) {
+            val animation = android.view.animation.AnimationUtils.loadAnimation(
+                view.context,
+                android.R.anim.fade_in
+            )
+            animation.duration = 350
+            view.startAnimation(animation)
+            lastAnimatedPosition = position
+        }
     }
 
     inner class PostViewHolder(
@@ -76,11 +91,24 @@ class PostAdapter(
                 setupMedia(post)
 
                 // Actions wiring
-                btnLike.setOnClickListener { onLikeClick(post) }
+                btnLike.setOnClickListener {
+                    onLikeClick(post)
+                    playLikeAnimation(ivLike)
+                }
                 btnComment.setOnClickListener { onCommentClick(post) }
                 btnShare.setOnClickListener { onShareClick(post) }
                 root.setOnClickListener { onCardClick(post) }
             }
+        }
+
+        private fun playLikeAnimation(imageView: android.widget.ImageView) {
+            val scaleUpX = android.animation.ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.4f, 1.0f)
+            val scaleUpY = android.animation.ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.4f, 1.0f)
+            val animatorSet = android.animation.AnimatorSet().apply {
+                playTogether(scaleUpX, scaleUpY)
+                duration = 300
+            }
+            animatorSet.start()
         }
 
         private fun ItemPostCardBinding.setupMedia(post: Post) {
