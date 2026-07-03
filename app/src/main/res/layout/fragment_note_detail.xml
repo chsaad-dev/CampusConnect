@@ -91,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:textColor="?attr/text_secondary"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginBottom="24dp"
                     tools:text="by Prof. John Doe" />
 
@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:text="Downloads"
                             android:textSize="12sp"
-                            android:textColor="?attr/text_secondary"
+                            android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp" />
                     </LinearLayout>
 
@@ -163,7 +163,7 @@
                             android:layout_height="wrap_content"
                             android:text="Rating"
                             android:textSize="12sp"
-                            android:textColor="?attr/text_secondary"
+                            android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp" />
                     </LinearLayout>
 
@@ -195,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:text="Likes"
                             android:textSize="12sp"
-                            android:textColor="?attr/text_secondary"
+                            android:textColor="@color/text_secondary"
                             android:layout_marginTop="2dp" />
                     </LinearLayout>
                 </LinearLayout>

@@ -29,7 +29,7 @@
             android:text="What are you sharing?"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?attr/text_secondary"
+            android:textColor="@color/text_secondary"
             android:layout_marginBottom="12dp" />
 
         <GridLayout
@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:text="PDF, DOC, Slides"
                         android:textSize="12sp"
-                        android:textColor="?attr/text_secondary"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginTop="2dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -132,7 +132,7 @@
                         android:layout_height="wrap_content"
                         android:text="Emergency call"
                         android:textSize="12sp"
-                        android:textColor="?attr/text_secondary"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginTop="2dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -180,7 +180,7 @@
                         android:layout_height="wrap_content"
                         android:text="Lost/found items"
                         android:textSize="12sp"
-                        android:textColor="?attr/text_secondary"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginTop="2dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -228,7 +228,7 @@
                         android:layout_height="wrap_content"
                         android:text="Find/share ride"
                         android:textSize="12sp"
-                        android:textColor="?attr/text_secondary"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginTop="2dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -524,7 +524,7 @@
             android:text="Attachments"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="?attr/text_secondary"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
@@ -587,7 +587,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="11sp"
-                        android:textColor="?attr/text_secondary"
+                        android:textColor="@color/text_secondary"
                         tools:text="PDF File" />
                 </LinearLayout>
 

@@ -78,7 +78,15 @@ class PostAdapter(
                     PostType.LOST_FOUND -> root.context.getColor(R.color.lost_found_orange)
                     PostType.RIDE -> root.context.getColor(R.color.ride_blue)
                 }
+                val chipBgColor = when (post.type) {
+                    PostType.NOTE -> root.context.getColor(R.color.primary_container)
+                    PostType.BLOOD -> android.graphics.Color.parseColor("#FFEAEA")
+                    PostType.LOST_FOUND -> android.graphics.Color.parseColor("#FFF3E0")
+                    PostType.RIDE -> android.graphics.Color.parseColor("#E0F7FA")
+                }
                 chipPostType.setTextColor(chipColor)
+                chipPostType.chipBackgroundColor = android.content.res.ColorStateList.valueOf(chipBgColor)
+                chipPostType.chipStrokeWidth = 0f
 
                 // Like status color
                 if (post.isLikedByCurrentUser) {

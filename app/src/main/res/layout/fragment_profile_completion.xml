@@ -225,7 +225,7 @@
             android:text="BLOOD GROUP"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:textColor="?attr/text_secondary"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp" />
 
@@ -301,7 +301,7 @@
             android:text="@string/label_skills"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:textColor="?attr/text_secondary"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp" />
 
@@ -318,7 +318,7 @@
             android:text="@string/label_interests"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:textColor="?attr/text_secondary"
+            android:textColor="@color/text_secondary"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp" />
 
