@@ -2,12 +2,18 @@ package com.campusconnect.core.di
 
 import com.campusconnect.data.repository.AuthRepositoryImpl
 import com.campusconnect.data.repository.ChatRepositoryImpl
+import com.campusconnect.data.repository.ComplaintRepositoryImpl
+import com.campusconnect.data.repository.EventRepositoryImpl
 import com.campusconnect.data.repository.FriendRepositoryImpl
+import com.campusconnect.data.repository.JobRepositoryImpl
 import com.campusconnect.data.repository.PostRepositoryImpl
 import com.campusconnect.data.repository.UserRepositoryImpl
 import com.campusconnect.domain.repository.AuthRepository
 import com.campusconnect.domain.repository.ChatRepository
+import com.campusconnect.domain.repository.ComplaintRepository
+import com.campusconnect.domain.repository.EventRepository
 import com.campusconnect.domain.repository.FriendRepository
+import com.campusconnect.domain.repository.JobRepository
 import com.campusconnect.domain.repository.PostRepository
 import com.campusconnect.domain.repository.UserRepository
 import dagger.Binds
@@ -49,4 +55,22 @@ abstract class RepositoryModule {
     abstract fun bindChatRepository(
         impl: ChatRepositoryImpl
     ): ChatRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindComplaintRepository(
+        impl: ComplaintRepositoryImpl
+    ): ComplaintRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindEventRepository(
+        impl: EventRepositoryImpl
+    ): EventRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindJobRepository(
+        impl: JobRepositoryImpl
+    ): JobRepository
 }

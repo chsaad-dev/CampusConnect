@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.campusconnect.R
+import com.campusconnect.core.common.Resource
 import com.campusconnect.core.theme.ThemeManager
 import com.campusconnect.core.theme.ThemeMode
 import com.campusconnect.databinding.FragmentSettingsBinding
+import com.campusconnect.domain.model.UserRole
+import com.campusconnect.domain.repository.UserRepository
 import com.campusconnect.feature.auth.AuthViewModel
-import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +33,9 @@ class SettingsFragment : Fragment() {
     @Inject
     lateinit var themeManager: ThemeManager
 
+    @Inject
+    lateinit var userRepository: UserRepository
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -40,6 +47,8 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupThemeToggle()
         setupLogout()
+        setupMenuClickListeners()
+        checkAdminRole()
     }
 
     private fun setupThemeToggle() {
@@ -68,6 +77,38 @@ class SettingsFragment : Fragment() {
         binding.btnLogout.setOnClickListener {
             authViewModel.logout()
             findNavController().navigate(R.id.action_settingsFragment_to_authNavGraph)
+        }
+    }
+
+    private fun setupMenuClickListeners() {
+        binding.cardComplaints.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_complaintListFragment)
+        }
+        binding.cardEvents.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_eventListFragment)
+        }
+        binding.cardJobs.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_jobListFragment)
+        }
+        binding.cardAdmin.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_adminDashboardFragment)
+        }
+    }
+
+    private fun checkAdminRole() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userRepository.getCurrentUserProfile().collectLatest { resource ->
+                    if (resource is Resource.Success) {
+                        val user = resource.data
+                        if (user.role == UserRole.ADMIN) {
+                            binding.cardAdmin.visibility = View.VISIBLE
+                        } else {
+                            binding.cardAdmin.visibility = View.GONE
+                        }
+                    }
+                }
+            }
         }
     }
 
