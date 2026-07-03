@@ -15,4 +15,5 @@ interface UserRepository {
     fun claimUsername(uid: String, username: String): Flow<Resource<Unit>>
     fun completeProfile(user: User): Flow<Resource<Unit>>
     fun isProfileComplete(uid: String): Flow<Resource<Boolean>>
+    fun trackSubjectView(subject: String): Flow<Resource<Unit>>
 }

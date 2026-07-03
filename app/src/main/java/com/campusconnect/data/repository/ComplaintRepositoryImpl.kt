@@ -138,4 +138,26 @@ class ComplaintRepositoryImpl @Inject constructor(
             emit(Resource.Error(e.message ?: "Failed to update complaint status"))
         }
     }
+
+    override fun getRecentComplaints(
+        category: String,
+        location: String,
+        timeWindowMs: Long
+    ): Flow<Resource<List<Complaint>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val cutoffTime = System.currentTimeMillis() - timeWindowMs
+            val snapshot = firestore.collection(Constants.COLLECTION_COMPLAINTS)
+                .whereEqualTo("category", category)
+                .whereEqualTo("location", location)
+                .whereGreaterThanOrEqualTo("createdAt", cutoffTime)
+                .get()
+                .await()
+
+            val list = snapshot.toObjects(Complaint::class.java)
+            emit(Resource.Success(list))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch recent complaints"))
+        }
+    }
 }

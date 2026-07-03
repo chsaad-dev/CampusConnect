@@ -26,7 +26,8 @@ data class UserDto(
     val themeMode: String = "light",
     val friendsCount: Int = 0,
     val createdAt: Long = 0L,
-    val isProfileComplete: Boolean = false
+    val isProfileComplete: Boolean = false,
+    val viewedSubjects: List<String> = emptyList()
 ) {
     /**
      * Converts DTO to domain model.
@@ -50,7 +51,8 @@ data class UserDto(
         themeMode = themeMode,
         friendsCount = friendsCount,
         createdAt = createdAt,
-        isProfileComplete = isProfileComplete
+        isProfileComplete = isProfileComplete,
+        viewedSubjects = viewedSubjects
     )
 
     companion object {
@@ -76,7 +78,8 @@ data class UserDto(
             themeMode = user.themeMode,
             friendsCount = user.friendsCount,
             createdAt = user.createdAt,
-            isProfileComplete = user.isProfileComplete
+            isProfileComplete = user.isProfileComplete,
+            viewedSubjects = user.viewedSubjects
         )
     }
 }

@@ -95,20 +95,68 @@ class SubmitComplaintFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            viewModel.submitComplaint(
-                category = category,
-                priority = priority,
-                location = location,
-                description = description,
-                imageUri = selectedImageUri
-            )
+            viewModel.checkForDuplicates(category, location, description)
         }
+    }
+
+    private fun executeComplaintSubmission() {
+        val category = binding.actvCategory.text.toString().trim()
+        val priority = binding.actvPriority.text.toString().trim()
+        val location = binding.etLocation.text.toString().trim()
+        val description = binding.etDescription.text.toString().trim()
+
+        viewModel.submitComplaint(
+            category = category,
+            priority = priority,
+            location = location,
+            description = description,
+            imageUri = selectedImageUri
+        )
     }
 
     private fun observeSubmitState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.submitState.collectLatest { state ->
+                // 1. Observe duplicate check
+                launch {
+                    viewModel.duplicateCheckState.collectLatest { state ->
+                        when (state) {
+                            is Resource.Loading -> {
+                                binding.progressBar.show()
+                                binding.btnSubmit.isEnabled = false
+                            }
+                            is Resource.Success -> {
+                                binding.progressBar.hide()
+                                binding.btnSubmit.isEnabled = true
+                                val duplicates = state.data
+                                if (duplicates.isEmpty()) {
+                                    executeComplaintSubmission()
+                                } else {
+                                    com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                                        .setTitle("Similar Issue Reported")
+                                        .setMessage("A similar issue in '${binding.etLocation.text}' was filed within the last 24 hours:\n\n\"${duplicates.first().description}\"\n\nDo you still want to file a new complaint?")
+                                        .setNegativeButton("Cancel") { _, _ -> viewModel.resetDuplicateCheck() }
+                                        .setPositiveButton("Submit Anyway") { _, _ ->
+                                            executeComplaintSubmission()
+                                            viewModel.resetDuplicateCheck()
+                                        }
+                                        .show()
+                                }
+                            }
+                            is Resource.Error -> {
+                                binding.progressBar.hide()
+                                binding.btnSubmit.isEnabled = true
+                                executeComplaintSubmission() // Proceed anyway if query fails
+                                viewModel.resetDuplicateCheck()
+                            }
+                            null -> {}
+                        }
+                    }
+                }
+
+                // 2. Observe submit state
+                launch {
+                    viewModel.submitState.collectLatest { state ->
                     when (state) {
                         is Resource.Loading -> {
                             binding.progressBar.show()
@@ -133,6 +181,7 @@ class SubmitComplaintFragment : Fragment() {
             }
         }
     }
+}
 
     override fun onDestroyView() {
         super.onDestroyView()

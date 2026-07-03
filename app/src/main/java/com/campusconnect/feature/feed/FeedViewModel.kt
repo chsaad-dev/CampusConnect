@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    private val userRepository: com.campusconnect.domain.repository.UserRepository
 ) : ViewModel() {
 
     private val _feedState = MutableStateFlow<Resource<List<Post>>?>(null)
@@ -29,15 +30,59 @@ class FeedViewModel @Inject constructor(
     private val _commentActionState = MutableStateFlow<Resource<Comment>?>(null)
     val commentActionState: StateFlow<Resource<Comment>?> = _commentActionState.asStateFlow()
 
+    private val _recommendedNotes = MutableStateFlow<Resource<List<com.campusconnect.domain.model.NoteDetails>>?>(null)
+    val recommendedNotes: StateFlow<Resource<List<com.campusconnect.domain.model.NoteDetails>>?> = _recommendedNotes.asStateFlow()
+
     private val postsList = mutableListOf<Post>()
     private var lastVisibleTimestamp: Long? = null
     private var isEndReached = false
+    private var isTrendingMode = false
 
     fun loadInitialFeed() {
         postsList.clear()
         lastVisibleTimestamp = null
         isEndReached = false
         fetchNextFeedBatch()
+        loadRecommendedNotes()
+    }
+
+    fun loadRecommendedNotes() {
+        _recommendedNotes.value = Resource.Loading
+        viewModelScope.launch {
+            userRepository.getCurrentUserProfile().collect { userResult ->
+                if (userResult is Resource.Success) {
+                    val user = userResult.data
+                    postRepository.getAllNotes().collect { notesResult ->
+                        if (notesResult is Resource.Success) {
+                            val notes = notesResult.data.filter { it.department.equals(user.department, ignoreCase = true) }
+                            // Sort by count of views on note's subject in viewedSubjects history
+                            val ranked = notes.sortedWith(compareByDescending { note ->
+                                user.viewedSubjects.count { it.equals(note.subject, ignoreCase = true) }
+                            })
+                            _recommendedNotes.value = Resource.Success(ranked)
+                        } else if (notesResult is Resource.Error) {
+                            _recommendedNotes.value = Resource.Error(notesResult.message)
+                        }
+                    }
+                } else if (userResult is Resource.Error) {
+                    _recommendedNotes.value = Resource.Error(userResult.message)
+                }
+            }
+        }
+    }
+
+    fun toggleFeedSorting(trending: Boolean) {
+        isTrendingMode = trending
+        emitCurrentFeed()
+    }
+
+    private fun emitCurrentFeed() {
+        val sortedList = if (isTrendingMode) {
+            postsList.sortedByDescending { com.campusconnect.core.utils.SmartAlgorithms.calculatePopularityScore(it.likeCount, 0, it.commentCount) }
+        } else {
+            postsList.sortedByDescending { it.createdAt }
+        }
+        _feedState.value = Resource.Success(sortedList)
     }
 
     fun fetchNextFeedBatch() {
@@ -53,7 +98,7 @@ class FeedViewModel @Inject constructor(
                         lastVisibleTimestamp = newPosts.last().createdAt
                         postsList.addAll(newPosts)
                     }
-                    _feedState.value = Resource.Success(postsList.toList())
+                    emitCurrentFeed()
                 }
                 is Resource.Error -> {
                     _feedState.value = resource

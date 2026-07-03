@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
 
     private val viewModel: FeedViewModel by viewModels()
     private lateinit var adapter: PostAdapter
+    private lateinit var recommendedAdapter: RecommendedNoteAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -46,11 +47,20 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         setupListeners()
         observeFeedState()
+        observeRecommendedState()
 
         viewModel.loadInitialFeed()
     }
 
     private fun setupRecyclerView() {
+        // Horizontal recommended notes
+        recommendedAdapter = RecommendedNoteAdapter { note ->
+            val bundle = Bundle().apply { putString("postId", note.postId) }
+            findNavController().navigate(R.id.action_homeFragment_to_noteDetailFragment, bundle)
+        }
+        binding.rvRecommendedNotes.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvRecommendedNotes.adapter = recommendedAdapter
+
         adapter = PostAdapter(
             onLikeClick = { post -> viewModel.toggleLike(post) },
             onCommentClick = { post -> showComments(post.postId) },
@@ -91,6 +101,41 @@ class HomeFragment : Fragment() {
 
         binding.fabCreatePost.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+        }
+
+        binding.tabFeedType.addOnTabSelectedListener(object : com.google.android.material.tabs.TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: com.google.android.material.tabs.TabLayout.Tab?) {
+                viewModel.toggleFeedSorting(tab?.position == 1)
+            }
+            override fun onTabUnselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+            override fun onTabReselected(tab: com.google.android.material.tabs.TabLayout.Tab?) {}
+        })
+    }
+
+    private fun observeRecommendedState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recommendedNotes.collectLatest { state ->
+                    when (state) {
+                        is Resource.Loading -> {
+                            binding.layoutRecommended.hide()
+                        }
+                        is Resource.Success -> {
+                            val notes = state.data
+                            if (notes.isNotEmpty()) {
+                                binding.layoutRecommended.show()
+                                recommendedAdapter.submitList(notes)
+                            } else {
+                                binding.layoutRecommended.hide()
+                            }
+                        }
+                        is Resource.Error -> {
+                            binding.layoutRecommended.hide()
+                        }
+                        null -> {}
+                    }
+                }
+            }
         }
     }
 

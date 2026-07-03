@@ -8,5 +8,6 @@ data class NoteDetails(
     val fileUrl: String = "",
     val downloads: Int = 0,
     val rating: Float = 0f,
+    val department: String = "",
     val createdAt: Long = 0L
 )

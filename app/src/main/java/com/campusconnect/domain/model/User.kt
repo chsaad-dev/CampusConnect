@@ -22,5 +22,6 @@ data class User(
     val themeMode: String = "light",
     val friendsCount: Int = 0,
     val createdAt: Long = 0L,
-    val isProfileComplete: Boolean = false
+    val isProfileComplete: Boolean = false,
+    val viewedSubjects: List<String> = emptyList()
 )

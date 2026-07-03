@@ -28,6 +28,32 @@ class ComplaintViewModel @Inject constructor(
     private val _complaintDetail = MutableStateFlow<Resource<Complaint>>(Resource.Loading)
     val complaintDetail: StateFlow<Resource<Complaint>> = _complaintDetail.asStateFlow()
 
+    private val _duplicateCheckState = MutableStateFlow<Resource<List<Complaint>>?>(null)
+    val duplicateCheckState: StateFlow<Resource<List<Complaint>>?> = _duplicateCheckState.asStateFlow()
+
+    fun checkForDuplicates(category: String, location: String, description: String) {
+        complaintRepository.getRecentComplaints(category, location, 24 * 60 * 60 * 1000)
+            .onEach { result ->
+                if (result is Resource.Success) {
+                    val potentialDuplicates = result.data.filter { existing ->
+                        com.campusconnect.core.utils.SmartAlgorithms.calculateTextSimilarity(
+                            description,
+                            existing.description
+                        ) >= 0.5
+                    }
+                    _duplicateCheckState.value = Resource.Success(potentialDuplicates)
+                } else if (result is Resource.Error) {
+                    _duplicateCheckState.value = Resource.Error(result.message)
+                } else if (result is Resource.Loading) {
+                    _duplicateCheckState.value = Resource.Loading
+                }
+            }.launchIn(viewModelScope)
+    }
+
+    fun resetDuplicateCheck() {
+        _duplicateCheckState.value = null
+    }
+
     fun submitComplaint(category: String, description: String, location: String, priority: String, imageUri: Uri?) {
         val complaint = Complaint(
             category = category,

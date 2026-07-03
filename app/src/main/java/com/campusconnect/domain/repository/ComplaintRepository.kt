@@ -9,4 +9,5 @@ interface ComplaintRepository {
     fun getStudentComplaints(): Flow<Resource<List<Complaint>>>
     fun getAllComplaints(): Flow<Resource<List<Complaint>>>
     fun updateComplaintStatus(complaintId: String, status: String, duplicateOfId: String): Flow<Resource<Unit>>
+    fun getRecentComplaints(category: String, location: String, timeWindowMs: Long): Flow<Resource<List<Complaint>>>
 }

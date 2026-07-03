@@ -19,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostDetailViewModel @Inject constructor(
-    private val postRepository: PostRepository
+    private val postRepository: PostRepository,
+    private val userRepository: com.campusconnect.domain.repository.UserRepository
 ) : ViewModel() {
 
     private val _noteDetails = MutableStateFlow<Resource<NoteDetails>>(Resource.Loading)
@@ -39,6 +40,9 @@ class PostDetailViewModel @Inject constructor(
             PostType.NOTE -> {
                 postRepository.getNoteDetails(postId).onEach { result ->
                     _noteDetails.value = result
+                    if (result is Resource.Success) {
+                        trackSubject(result.data.subject)
+                    }
                 }.launchIn(viewModelScope)
             }
             PostType.BLOOD -> {
@@ -56,6 +60,12 @@ class PostDetailViewModel @Inject constructor(
                     _rideDetails.value = result
                 }.launchIn(viewModelScope)
             }
+        }
+    }
+
+    private fun trackSubject(subject: String) {
+        if (subject.isNotEmpty()) {
+            userRepository.trackSubjectView(subject).launchIn(viewModelScope)
         }
     }
 }

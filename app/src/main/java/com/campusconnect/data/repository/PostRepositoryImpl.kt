@@ -115,6 +115,7 @@ class PostRepositoryImpl @Inject constructor(
                     noteData["postId"] = newPostId
                     noteData["uploaderId"] = uid
                     noteData["fileUrl"] = mediaUrls.firstOrNull() ?: ""
+                    noteData["department"] = finalPost.department
                     noteData["createdAt"] = finalPost.createdAt
                     batch.set(noteRef, noteData)
                 }
@@ -397,6 +398,19 @@ class PostRepositoryImpl @Inject constructor(
             emit(Resource.Success(details))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to fetch ride details"))
+        }
+    }
+
+    override fun getAllNotes(): Flow<Resource<List<NoteDetails>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val snapshot = firestore.collection(Constants.COLLECTION_NOTES)
+                .get()
+                .await()
+            val list = snapshot.toObjects(NoteDetails::class.java)
+            emit(Resource.Success(list))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch notes"))
         }
     }
 }

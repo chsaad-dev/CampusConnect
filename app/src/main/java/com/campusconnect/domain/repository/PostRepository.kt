@@ -20,4 +20,5 @@ interface PostRepository {
     fun getBloodRequestDetails(postId: String): Flow<Resource<BloodRequestDetails>>
     fun getLostFoundDetails(postId: String): Flow<Resource<LostFoundDetails>>
     fun getRideDetails(postId: String): Flow<Resource<RideDetails>>
+    fun getAllNotes(): Flow<Resource<List<NoteDetails>>>
 }

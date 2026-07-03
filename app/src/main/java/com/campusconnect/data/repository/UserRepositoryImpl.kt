@@ -144,4 +144,20 @@ class UserRepositoryImpl @Inject constructor(
             emit(Resource.Error(e.message ?: "Failed to check profile status"))
         }
     }
+
+    override fun trackSubjectView(subject: String): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading)
+        try {
+            val uid = auth.currentUser?.uid
+            if (uid != null && subject.isNotBlank()) {
+                firestore.collection(Constants.COLLECTION_USERS)
+                    .document(uid)
+                    .update("viewedSubjects", com.google.firebase.firestore.FieldValue.arrayUnion(subject.trim()))
+                    .await()
+            }
+            emit(Resource.Success(Unit))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to track subject view"))
+        }
+    }
 }
