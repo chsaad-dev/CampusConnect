@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    android:backgroundTint="@color/white"
     android:background="?attr/android:colorBackground">
 
     <LinearLayout
@@ -21,16 +22,16 @@
         <!-- App Logo -->
         <TextView
             android:id="@+id/tv_logo_cc"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="121dp"
+            android:layout_height="116dp"
             android:layout_gravity="center"
-            android:background="@drawable/bg_cc_logo"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/logo"
             android:gravity="center"
             android:text="CC"
             android:textColor="@color/white"
             android:textSize="32sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="24dp" />
+            android:textStyle="bold" />
 
         <!-- Welcome Title -->
         <TextView
