@@ -60,8 +60,7 @@ class ChatListFragment : Fragment() {
             description = "Start chatting with a friend by searching for them.",
             actionText = "Find Friends",
             actionListener = {
-                val bottomNav = requireActivity().findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation)
-                bottomNav?.selectedItemId = R.id.searchFragment
+                findNavController().navigate(R.id.friendsFragment)
             }
         )
     }

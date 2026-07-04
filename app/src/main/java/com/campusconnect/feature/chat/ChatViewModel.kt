@@ -37,8 +37,11 @@ class ChatViewModel @Inject constructor(
     private val _typingStatus = MutableStateFlow<Map<String, Boolean>>(emptyMap())
     val typingStatus: StateFlow<Map<String, Boolean>> = _typingStatus.asStateFlow()
 
+    private var chatsJob: kotlinx.coroutines.Job? = null
+
     fun loadChats() {
-        chatRepository.getChats().onEach { result ->
+        chatsJob?.cancel()
+        chatsJob = chatRepository.getChats().onEach { result ->
             _chats.value = result
         }.launchIn(viewModelScope)
     }

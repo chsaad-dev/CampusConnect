@@ -81,6 +81,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupMenuClickListeners() {
+        binding.cardFriends.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_friendsFragment)
+        }
         binding.cardComplaints.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_complaintListFragment)
         }

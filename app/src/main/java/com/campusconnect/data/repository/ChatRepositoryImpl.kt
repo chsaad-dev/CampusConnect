@@ -30,21 +30,29 @@ class ChatRepositoryImpl @Inject constructor(
     private val currentUid: String
         get() = auth.currentUser?.uid ?: throw Exception("User not logged in")
 
-    override fun getChats(): Flow<Resource<List<Chat>>> = flow {
-        emit(Resource.Loading)
-        try {
-            val uid = currentUid
-            val snapshot = firestore.collection(Constants.COLLECTION_CHATS)
-                .whereArrayContains("participants", uid)
-                .orderBy("lastMessageAt", Query.Direction.DESCENDING)
-                .get()
-                .await()
-
-            val chatsList = snapshot.toObjects(Chat::class.java)
-            emit(Resource.Success(chatsList))
-        } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Failed to fetch chats"))
+    override fun getChats(): Flow<Resource<List<Chat>>> = callbackFlow {
+        trySend(Resource.Loading)
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            trySend(Resource.Success(emptyList()))
+            close()
+            return@callbackFlow
         }
+
+        val listener = firestore.collection(Constants.COLLECTION_CHATS)
+            .whereArrayContains("participants", uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(Resource.Error(error.message ?: "Failed to listen to chats"))
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val chatsList = snapshot.toObjects(Chat::class.java)
+                        .sortedByDescending { it.lastMessageAt }
+                    trySend(Resource.Success(chatsList))
+                }
+            }
+        awaitClose { listener.remove() }
     }
 
     override fun getMessages(chatId: String): Flow<Resource<List<Message>>> = callbackFlow {
