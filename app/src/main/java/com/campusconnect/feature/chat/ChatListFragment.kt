@@ -41,6 +41,10 @@ class ChatListFragment : Fragment() {
         setupRecyclerView()
         observeViewModel()
 
+        binding.ivSearch.setOnClickListener {
+            findNavController().navigate(R.id.friendsFragment)
+        }
+
         viewModel.loadChats()
     }
 
