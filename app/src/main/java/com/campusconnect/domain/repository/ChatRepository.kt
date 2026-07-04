@@ -13,4 +13,5 @@ interface ChatRepository {
     fun updateTypingStatus(chatId: String, isTyping: Boolean): Flow<Resource<Unit>>
     fun listenToTypingStatus(chatId: String): Flow<Map<String, Boolean>>
     fun markMessagesAsSeen(chatId: String): Flow<Resource<Unit>>
+    fun getTotalUnreadCount(): Flow<Int>
 }

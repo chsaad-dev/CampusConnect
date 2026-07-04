@@ -43,6 +43,17 @@ class EventListFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.swipeRefresh.setColorSchemeResources(R.color.primary)
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadEvents()
+        }
+
+        binding.emptyState.setupEmptyState(
+            iconRes = R.drawable.ic_home,
+            title = "No events posted yet",
+            description = "There are no campus events scheduled at the moment. Please check back later."
+        )
+
         setupRecyclerView()
         observeViewModel()
 
@@ -66,11 +77,14 @@ class EventListFragment : Fragment() {
                 viewModel.eventsList.collectLatest { state ->
                     when (state) {
                         is Resource.Loading -> {
-                            binding.progressBar.show()
+                            if (!binding.swipeRefresh.isRefreshing) {
+                                binding.progressBar.show()
+                            }
                             binding.emptyState.hide()
                         }
                         is Resource.Success -> {
                             binding.progressBar.hide()
+                            binding.swipeRefresh.isRefreshing = false
                             val list = state.data
                             adapter.submitList(list)
 
@@ -84,6 +98,7 @@ class EventListFragment : Fragment() {
                         }
                         is Resource.Error -> {
                             binding.progressBar.hide()
+                            binding.swipeRefresh.isRefreshing = false
                             binding.emptyState.show()
                         }
                     }

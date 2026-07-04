@@ -33,6 +33,11 @@ class FeedViewModel @Inject constructor(
     private val _recommendedNotes = MutableStateFlow<Resource<List<com.campusconnect.domain.model.NoteDetails>>?>(null)
     val recommendedNotes: StateFlow<Resource<List<com.campusconnect.domain.model.NoteDetails>>?> = _recommendedNotes.asStateFlow()
 
+    private val _storyAuthorsState = MutableStateFlow<Resource<List<com.campusconnect.domain.model.User>>?>(null)
+    val storyAuthorsState: StateFlow<Resource<List<com.campusconnect.domain.model.User>>?> = _storyAuthorsState.asStateFlow()
+
+    val currentUserProfile = userRepository.getCurrentUserProfile()
+
     private val postsList = mutableListOf<Post>()
     private var lastVisibleTimestamp: Long? = null
     private var isEndReached = false
@@ -44,6 +49,13 @@ class FeedViewModel @Inject constructor(
         isEndReached = false
         fetchNextFeedBatch()
         loadRecommendedNotes()
+        fetchRecentStoryAuthors()
+    }
+
+    fun fetchRecentStoryAuthors() {
+        postRepository.getRecentStoryAuthors().onEach { result ->
+            _storyAuthorsState.value = result
+        }.launchIn(viewModelScope)
     }
 
     fun loadRecommendedNotes() {

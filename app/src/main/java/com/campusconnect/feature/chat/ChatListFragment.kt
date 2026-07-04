@@ -53,6 +53,17 @@ class ChatListFragment : Fragment() {
         )
         binding.rvChats.layoutManager = LinearLayoutManager(requireContext())
         binding.rvChats.adapter = adapter
+
+        binding.emptyState.setupEmptyState(
+            iconRes = R.drawable.ic_chat,
+            title = "No conversations yet",
+            description = "Start chatting with a friend by searching for them.",
+            actionText = "Find Friends",
+            actionListener = {
+                val bottomNav = requireActivity().findViewById<com.google.android.material.bottomnavigation.BottomNavigationView>(R.id.bottom_navigation)
+                bottomNav?.selectedItemId = R.id.searchFragment
+            }
+        )
     }
 
     private fun observeViewModel() {

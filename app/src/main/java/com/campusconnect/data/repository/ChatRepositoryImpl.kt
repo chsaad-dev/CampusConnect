@@ -110,7 +110,8 @@ class ChatRepositoryImpl @Inject constructor(
                 chatRef,
                 mapOf(
                     "lastMessage" to if (uploadUrl.isNotEmpty()) "Sent an attachment" else text,
-                    "lastMessageAt" to message.createdAt
+                    "lastMessageAt" to message.createdAt,
+                    "lastReadAt.$uid" to message.createdAt
                 )
             )
 
@@ -237,9 +238,49 @@ class ChatRepositoryImpl @Inject constructor(
             if (updated) {
                 batch.commit().await()
             }
+            
+            // Also update lastReadAt on parent chat doc
+            firestore.collection(Constants.COLLECTION_CHATS)
+                .document(chatId)
+                .update("lastReadAt.$uid", System.currentTimeMillis())
+                .await()
+
             emit(Resource.Success(Unit))
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to mark messages as seen"))
         }
+    }
+
+    override fun getTotalUnreadCount(): Flow<Int> = callbackFlow {
+        val uid = auth.currentUser?.uid
+        if (uid == null) {
+            trySend(0)
+            close()
+            return@callbackFlow
+        }
+
+        val listener = firestore.collection(Constants.COLLECTION_CHATS)
+            .whereArrayContains("participants", uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(0)
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    var totalUnread = 0
+                    for (doc in snapshot.documents) {
+                        val chat = doc.toObject(Chat::class.java)
+                        if (chat != null) {
+                            val lastMessageAt = chat.lastMessageAt
+                            val lastReadAt = chat.lastReadAt[uid] ?: 0L
+                            if (lastMessageAt > lastReadAt) {
+                                totalUnread++
+                            }
+                        }
+                    }
+                    trySend(totalUnread)
+                }
+            }
+        awaitClose { listener.remove() }
     }
 }

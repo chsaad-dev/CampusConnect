@@ -21,6 +21,7 @@ import com.campusconnect.core.common.showErrorSnackbar
 import com.campusconnect.core.common.showToast
 import com.campusconnect.databinding.FragmentHomeBinding
 import com.campusconnect.domain.model.Post
+import com.campusconnect.feature.post.CreatePostBottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private val viewModel: FeedViewModel by viewModels()
     private lateinit var adapter: PostAdapter
     private lateinit var recommendedAdapter: RecommendedNoteAdapter
+    private lateinit var storyAdapter: StoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -48,11 +50,24 @@ class HomeFragment : Fragment() {
         setupListeners()
         observeFeedState()
         observeRecommendedState()
+        observeStoriesState()
 
         viewModel.loadInitialFeed()
     }
 
     private fun setupRecyclerView() {
+        // Stories Row
+        storyAdapter = StoryAdapter(
+            onYourStoryClick = {
+                CreatePostBottomSheetFragment().show(childFragmentManager, "create_post")
+            },
+            onAuthorStoryClick = { _ ->
+                CreatePostBottomSheetFragment().show(childFragmentManager, "create_post")
+            }
+        )
+        binding.rvStories.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvStories.adapter = storyAdapter
+
         // Horizontal recommended notes
         recommendedAdapter = RecommendedNoteAdapter { note ->
             val bundle = Bundle().apply { putString("postId", note.postId) }
@@ -78,6 +93,16 @@ class HomeFragment : Fragment() {
 
         binding.rvFeed.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFeed.adapter = adapter
+
+        binding.viewEmptyState.setupEmptyState(
+            iconRes = R.drawable.ic_home,
+            title = "No posts yet",
+            description = "Be the first to share notes, blood requests, or rides with your campus!",
+            actionText = "Share Something",
+            actionListener = {
+                CreatePostBottomSheetFragment().show(childFragmentManager, "create_post")
+            }
+        )
 
         // Pagination Scroll Listener
         binding.rvFeed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -139,6 +164,49 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun observeStoriesState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                var currentProfile: com.campusconnect.domain.model.User? = null
+                viewModel.currentUserProfile.collectLatest { userResult ->
+                    if (userResult is Resource.Success) {
+                        currentProfile = userResult.data
+                        updateStoryList(currentProfile, viewModel.storyAuthorsState.value)
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.storyAuthorsState.collectLatest { resource ->
+                    if (resource is Resource.Success) {
+                        var currentProfile: com.campusconnect.domain.model.User? = null
+                        viewModel.currentUserProfile.collect { userResult ->
+                            if (userResult is Resource.Success) {
+                                currentProfile = userResult.data
+                                return@collect
+                            }
+                        }
+                        updateStoryList(currentProfile, resource)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateStoryList(currentUser: com.campusconnect.domain.model.User?, resource: Resource<List<com.campusconnect.domain.model.User>>?) {
+        val storyList = mutableListOf<com.campusconnect.domain.model.User>()
+        val userPlaceholder = currentUser ?: com.campusconnect.domain.model.User(uid = "current_user", name = "You")
+        storyList.add(userPlaceholder)
+
+        if (resource is Resource.Success) {
+            val authors = resource.data
+            storyList.addAll(authors.filter { it.uid != userPlaceholder.uid })
+        }
+        storyAdapter.submitList(storyList)
+    }
+
     private fun observeFeedState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -188,6 +256,13 @@ class HomeFragment : Fragment() {
             putExtra(Intent.EXTRA_TEXT, "${post.authorName} posted: \"${post.caption}\"\nShared via CampusConnect.")
         }
         startActivity(Intent.createChooser(shareIntent, "Share post via"))
+    }
+
+    fun reloadAndScrollToTop() {
+        viewModel.loadInitialFeed()
+        binding.scrollView.post {
+            binding.scrollView.smoothScrollTo(0, 0)
+        }
     }
 
     override fun onDestroyView() {

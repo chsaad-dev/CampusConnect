@@ -9,5 +9,6 @@ data class Chat(
     val lastMessage: String = "",
     val lastMessageAt: Long = 0L,
     val isGroup: Boolean = false,
-    val groupName: String = ""
+    val groupName: String = "",
+    val lastReadAt: Map<String, Long> = emptyMap()
 )

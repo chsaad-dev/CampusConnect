@@ -48,6 +48,17 @@ class JobListFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.swipeRefresh.setColorSchemeResources(R.color.primary)
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadJobs()
+        }
+
+        binding.emptyState.setupEmptyState(
+            iconRes = R.drawable.ic_briefcase,
+            title = "No jobs posted yet",
+            description = "There are no campus jobs or internships available at the moment. Please check back later."
+        )
+
         setupRecyclerView()
         setupFilters()
         observeViewModel()
@@ -116,11 +127,14 @@ class JobListFragment : Fragment() {
                 viewModel.jobsList.collectLatest { state ->
                     when (state) {
                         is Resource.Loading -> {
-                            binding.progressBar.show()
+                            if (!binding.swipeRefresh.isRefreshing) {
+                                binding.progressBar.show()
+                            }
                             binding.emptyState.hide()
                         }
                         is Resource.Success -> {
                             binding.progressBar.hide()
+                            binding.swipeRefresh.isRefreshing = false
                             originalJobsList = state.data
                             applyFilters()
 
@@ -134,6 +148,7 @@ class JobListFragment : Fragment() {
                         }
                         is Resource.Error -> {
                             binding.progressBar.hide()
+                            binding.swipeRefresh.isRefreshing = false
                             binding.emptyState.show()
                         }
                     }
