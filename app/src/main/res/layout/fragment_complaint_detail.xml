@@ -4,21 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:fillViewport="true"
+    android:background="?attr/android:colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="@dimen/spacing_lg">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="Complaint Details"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            android:layout_marginBottom="16dp" />
+            app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            android:layout_marginBottom="@dimen/spacing_md" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -27,13 +29,11 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/content_card"
+            style="@style/CampusConnect.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:cardUseCompatPadding="true"
             android:visibility="gone"
             tools:visibility="visible">
 
@@ -41,24 +41,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="@dimen/card_padding">
 
                 <TextView
                     android:id="@+id/tv_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/text_headline"
                     android:textStyle="bold"
-                    android:layout_marginBottom="8dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="@dimen/spacing_xs"
                     tools:text="Academics" />
 
                 <TextView
                     android:id="@+id/tv_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:layout_marginBottom="16dp"
+                    android:textSize="@dimen/text_caption"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginBottom="@dimen/spacing_md"
                     tools:text="Location: Library Room 204" />
 
                 <TextView
@@ -66,35 +68,49 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Description:"
-                    android:textSize="12sp"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textSize="@dimen/text_caption"
+                    android:textColor="@color/text_hint"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/spacing_xxs" />
 
                 <TextView
                     android:id="@+id/tv_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="?attr/colorOnSurface"
+                    android:lineSpacingMultiplier="1.2"
+                    android:layout_marginBottom="@dimen/spacing_md"
                     tools:text="Projector is broken and flickers constantly." />
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_complaint"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="centerCrop"
                     android:visibility="gone"
                     android:contentDescription="Complaint Image"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="@dimen/spacing_md"
+                    app:shapeAppearance="@style/CampusConnect.ShapeSmall"
                     tools:visibility="visible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/divider_height"
+                    android:background="@color/divider"
+                    android:layout_marginBottom="@dimen/spacing_md" />
 
                 <!-- Timeline Resolution Status UI -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Resolution Timeline"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_subtitle"
                     android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="@dimen/spacing_sm" />
 
                 <!-- Step 1: Submitted -->
                 <LinearLayout
@@ -102,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="@dimen/spacing_sm">
                     <ImageView
                         android:id="@+id/iv_step_submitted"
                         android:layout_width="16dp"
@@ -113,9 +129,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1. Submitted"
-                        android:textSize="14sp"
-                        android:layout_marginStart="12dp"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textSize="@dimen/text_body"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
                 <!-- Step 2: Under Review / In Progress -->
@@ -124,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="@dimen/spacing_sm">
                     <ImageView
                         android:id="@+id/iv_step_progress"
                         android:layout_width="16dp"
@@ -135,9 +151,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2. In Progress"
-                        android:textSize="14sp"
-                        android:layout_marginStart="12dp"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textSize="@dimen/text_body"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
                 <!-- Step 3: Resolved -->
@@ -146,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="@dimen/spacing_sm">
                     <ImageView
                         android:id="@+id/iv_step_resolved"
                         android:layout_width="16dp"
@@ -157,9 +173,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3. Resolved"
-                        android:textSize="14sp"
-                        android:layout_marginStart="12dp"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textSize="@dimen/text_body"
+                        android:layout_marginStart="@dimen/spacing_sm"
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
                 <!-- Duplicate Alert Panel -->
@@ -169,28 +185,30 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    android:layout_marginTop="8dp"
-                    android:padding="8dp"
-                    android:background="@android:drawable/dialog_holo_light_frame"
-                    android:backgroundTint="#FFEBEE">
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:padding="@dimen/spacing_sm"
+                    android:background="@drawable/bg_bubble_received"
+                    android:backgroundTint="@color/error_container">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Duplicate Complaint"
-                        android:textColor="#C62828"
+                        android:textColor="@color/blood_red"
                         android:textStyle="bold"
-                        android:textSize="13sp" />
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="@dimen/text_caption" />
                     <TextView
                         android:id="@+id/tv_duplicate_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#C62828"
-                        android:textSize="12sp"
+                        android:textColor="@color/blood_red"
+                        android:textSize="@dimen/text_caption"
+                        android:layout_marginTop="2dp"
                         tools:text="Merged under ID: #123456" />
                 </LinearLayout>
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </ScrollView>

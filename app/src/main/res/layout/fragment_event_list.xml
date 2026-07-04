@@ -5,14 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurfaceVariant">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
         app:title="Campus Events"
-        app:navigationIcon="?attr/homeAsUpIndicator" />
+        app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+        app:navigationIcon="@drawable/ic_arrow_back" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -29,7 +37,7 @@
             android:id="@+id/rv_events"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
+            android:padding="@dimen/spacing_xs"
             android:clipToPadding="false" />
 
         <com.campusconnect.core.widgets.EmptyStateView

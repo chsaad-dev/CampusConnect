@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:fillViewport="true"
+    android:background="?attr/android:colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,8 +26,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:navigationIcon="?attr/homeAsUpIndicator"
-                app:navigationIconTint="?attr/colorOnPrimary"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:navigationIconTint="@color/white"
                 android:background="@android:color/transparent" />
         </FrameLayout>
 
@@ -34,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="@dimen/spacing_lg">
 
             <ProgressBar
                 android:id="@+id/progress_bar"
@@ -55,8 +56,10 @@
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/text_headline"
                     android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="?attr/colorOnBackground"
                     android:layout_marginBottom="6dp"
                     tools:text="Symposium 2026" />
 
@@ -64,9 +67,10 @@
                     android:id="@+id/tv_host"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_body"
                     android:textColor="?attr/colorPrimary"
-                    android:layout_marginBottom="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="@dimen/spacing_md"
                     tools:text="Society" />
 
                 <!-- Countdown Timer Card -->
@@ -74,30 +78,34 @@
                     android:id="@+id/card_countdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
+                    app:cardCornerRadius="@dimen/corner_medium"
+                    app:cardElevation="@dimen/card_elevation_flat"
+                    app:strokeWidth="0dp"
                     app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="@dimen/spacing_lg">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp"
+                        android:padding="@dimen/card_padding"
                         android:gravity="center">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="EVENT STARTS IN"
-                            android:textSize="11sp"
+                            android:textSize="@dimen/text_overline"
                             android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
                             android:textColor="?attr/colorOnPrimaryContainer" />
                         <TextView
                             android:id="@+id/tv_countdown"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="24sp"
+                            android:textSize="@dimen/text_headline"
                             android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
                             android:textColor="?attr/colorOnPrimaryContainer"
+                            android:layout_marginTop="4dp"
                             tools:text="02d : 10h : 30m : 15s" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -107,36 +115,39 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="About Event"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_subtitle"
                     android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="?attr/colorOnBackground"
                     android:layout_marginBottom="6dp" />
                 
                 <TextView
                     android:id="@+id/tv_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:layout_marginBottom="24dp"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="@color/text_secondary"
+                    android:lineSpacingMultiplier="1.2"
+                    android:layout_marginBottom="@dimen/spacing_lg"
                     tools:text="Detailed description of symposium..." />
 
                 <!-- Action Register Button -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_register"
+                    style="@style/CampusConnect.Button.Primary"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:text="Register For Event"
-                    android:textSize="16sp"
-                    app:cornerRadius="12dp"
-                    android:layout_marginBottom="24dp" />
+                    android:textSize="@dimen/text_subtitle"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/spacing_lg" />
 
-                <!-- Ticket Card (shown only after registration) -->
+                <!-- Ticket Card -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_ticket"
+                    style="@style/CampusConnect.Card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
                     android:visibility="gone"
                     tools:visibility="visible">
                     <LinearLayout
@@ -150,7 +161,8 @@
                             android:layout_height="wrap_content"
                             android:text="YOUR ENTRY PASS"
                             android:textStyle="bold"
-                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textSize="@dimen/text_subtitle"
                             android:textColor="?attr/colorPrimary"
                             android:layout_marginBottom="12dp" />
                         <ImageView
@@ -164,8 +176,8 @@
                             android:id="@+id/tv_ticket_id"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="@dimen/text_caption"
+                            android:textColor="@color/text_secondary"
                             tools:text="Ticket ID: TICKET_symp123" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
