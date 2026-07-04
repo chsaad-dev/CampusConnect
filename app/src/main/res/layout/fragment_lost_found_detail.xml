@@ -5,15 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface"
-    android:padding="16dp">
+    android:background="?attr/colorSurfaceVariant"
+    android:padding="@dimen/spacing_lg">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:title="Lost &amp; Found Details"
-        app:navigationIcon="?attr/homeAsUpIndicator" />
+        app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        android:layout_marginBottom="@dimen/spacing_md" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -22,13 +25,11 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/content_card"
+        style="@style/CampusConnect.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -36,61 +37,84 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/card_padding">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Item Name:"
-                android:textSize="14sp"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_hint"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
             <TextView
                 android:id="@+id/tv_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="@dimen/text_headline"
                 android:textStyle="bold"
-                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginBottom="@dimen/spacing_md"
                 tools:text="Black Wallet" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="@color/divider"
+                android:layout_marginBottom="@dimen/spacing_md" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Category:"
-                android:textSize="14sp"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_hint"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
             <TextView
                 android:id="@+id/tv_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_marginBottom="12dp"
+                android:textSize="@dimen/text_body"
+                android:textColor="?attr/colorOnSurface"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="@dimen/spacing_md"
                 tools:text="Accessories" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location:"
-                android:textSize="14sp"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:textSize="@dimen/text_caption"
+                android:textColor="@color/text_hint"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
 
             <TextView
                 android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_marginBottom="16dp"
+                android:textSize="@dimen/text_body"
+                android:textColor="?attr/colorOnSurface"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="@dimen/spacing_lg"
                 tools:text="Library 2nd Floor" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_contact_owner"
+                style="@style/CampusConnect.Button.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:text="Contact Uploader"
-                app:icon="@android:drawable/ic_dialog_email" />
+                app:icon="@android:drawable/ic_dialog_email"
+                app:iconTint="@color/white" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

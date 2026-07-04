@@ -5,18 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurfaceVariant">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Friends &amp; Connections" />
+        android:background="?attr/colorSurface"
+        app:title="Friends &amp; Connections"
+        app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+        app:titleTextColor="?attr/colorOnSurface" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
+        style="@style/CampusConnect.TabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
         app:tabMode="fixed"
         app:tabGravity="fill">
         <com.google.android.material.tabs.TabItem
@@ -33,22 +38,30 @@
             android:text="Search Users" />
     </com.google.android.material.tabs.TabLayout>
 
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
     <!-- Search Input Layout (only visible in Search tab) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_search"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        style="@style/CampusConnect.TextInput.Rounded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Search by unique username..."
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/spacing_md"
         android:visibility="gone"
-        app:startIconDrawable="@android:drawable/ic_menu_search">
+        app:startIconDrawable="@drawable/ic_search"
+        app:startIconTint="@color/text_secondary">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:textSize="@dimen/text_body" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <FrameLayout
@@ -56,7 +69,6 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- Shimmer / ProgressBar -->
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
@@ -69,14 +81,15 @@
             android:id="@+id/container_friends"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_friends"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                android:clipToPadding="false" />
-            
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/spacing_xs"
+                android:paddingBottom="@dimen/spacing_sm" />
+
             <com.campusconnect.core.widgets.EmptyStateView
                 android:id="@+id/empty_state_friends"
                 android:layout_width="wrap_content"
@@ -91,14 +104,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-            
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_requests"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                android:clipToPadding="false" />
-            
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/spacing_xs"
+                android:paddingBottom="@dimen/spacing_sm" />
+
             <com.campusconnect.core.widgets.EmptyStateView
                 android:id="@+id/empty_state_requests"
                 android:layout_width="wrap_content"
@@ -113,14 +127,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-            
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_search_results"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                android:clipToPadding="false" />
-            
+                android:clipToPadding="false"
+                android:paddingTop="@dimen/spacing_xs"
+                android:paddingBottom="@dimen/spacing_sm" />
+
             <com.campusconnect.core.widgets.EmptyStateView
                 android:id="@+id/empty_state_search"
                 android:layout_width="wrap_content"

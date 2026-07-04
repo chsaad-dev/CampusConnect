@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
+        app:elevation="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -19,16 +20,39 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="CampusConnect"
-            app:titleCentered="true"
-            app:titleTextColor="?attr/colorPrimary" />
+            app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+            app:titleTextColor="?attr/colorPrimary">
+
+            <!-- Notification bell icon at end -->
+            <ImageView
+                android:id="@+id/iv_notification"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/spacing_md"
+                android:src="@drawable/ic_notification"
+                app:tint="?attr/colorOnSurfaceVariant"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Notifications"
+                android:clickable="true"
+                android:focusable="true" />
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Divider below toolbar -->
+    <View
+        android:id="@+id/toolbar_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
 
     <!-- Swipe Refresh Layout containing Feed -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/appbar"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_divider"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.core.widget.NestedScrollView
@@ -46,6 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/spacing_xl"
                     android:visibility="gone" />
 
                 <!-- 1. Recommended Notes Section -->
@@ -61,20 +86,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Recommended for You"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_subtitle"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSurface"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="8dp" />
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginStart="@dimen/spacing_md"
+                        android:layout_marginTop="@dimen/spacing_md"
+                        android:layout_marginBottom="@dimen/spacing_sm" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_recommended_notes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
+                        android:paddingStart="@dimen/spacing_sm"
+                        android:paddingEnd="@dimen/spacing_sm"
                         android:clipToPadding="false"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
                 </LinearLayout>
@@ -82,11 +108,14 @@
                 <!-- 2. Feed Type Tab Layout -->
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_feed_type"
+                    style="@style/CampusConnect.TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:background="?attr/colorSurface"
                     app:tabMode="fixed"
-                    app:tabGravity="fill">
+                    app:tabGravity="fill"
+                    app:tabTextAppearance="@style/CampusConnect.TextAppearance.Body">
                     <com.google.android.material.tabs.TabItem
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -104,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false"
-                    android:paddingTop="8dp"
+                    android:paddingTop="@dimen/spacing_sm"
                     android:paddingBottom="90dp"
                     tools:listitem="@layout/item_post_card" />
 
@@ -114,6 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/spacing_xxl"
                     android:visibility="gone"
                     app:emptyTitle="No posts yet"
                     app:emptyDescription="Be the first to share notes, blood requests, or rides with your campus!" />
@@ -128,11 +158,14 @@
         android:id="@+id/fab_create_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:src="@android:drawable/ic_input_add"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add"
         android:contentDescription="Create Post"
-        app:tint="?attr/colorOnPrimary"
+        app:tint="@null"
         app:backgroundTint="?attr/colorPrimary"
+        app:shapeAppearance="@style/CampusConnect.ShapeMedium"
+        app:fabSize="normal"
+        app:elevation="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
