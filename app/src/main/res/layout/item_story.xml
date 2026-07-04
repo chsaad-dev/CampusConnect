@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_marginEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <FrameLayout
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="6dp">
+
+        <!-- Outer Gradient Ring -->
+        <View
+            android:id="@+id/view_ring"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_story_ring" />
+
+        <!-- Inner Mask (to make the ring a line) -->
+        <View
+            android:id="@+id/view_mask"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_avatar_circle"
+            android:backgroundTint="?attr/colorSurface" />
+
+        <!-- User Profile Avatar -->
+        <com.campusconnect.core.widgets.UserAvatarView
+            android:id="@+id/view_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            app:avatarSize="48dp" />
+
+        <!-- Add badge (Visible only for current user "Your story") -->
+        <ImageView
+            android:id="@+id/iv_add_badge"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bg_story_add_badge"
+            android:src="@drawable/ic_add"
+            android:padding="3dp"
+            app:tint="@color/white"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
+
+    <!-- Name Label (Max 4 letters, centered) -->
+    <TextView
+        android:id="@+id/tv_story_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="John" />
+
+</LinearLayout>

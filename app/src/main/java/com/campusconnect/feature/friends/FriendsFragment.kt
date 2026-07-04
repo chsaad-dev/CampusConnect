@@ -77,6 +77,29 @@ class FriendsFragment : Fragment() {
         )
         binding.rvSearchResults.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchResults.adapter = searchAdapter
+
+        // Initialize Empty States
+        binding.emptyStateFriends.setupEmptyState(
+            iconRes = R.drawable.ic_friends,
+            title = "No friends yet",
+            description = "Find classmates in Search to connect with them.",
+            actionText = "Search Classmates",
+            actionListener = {
+                binding.tabLayout.getTabAt(2)?.select()
+            }
+        )
+
+        binding.emptyStateRequests.setupEmptyState(
+            iconRes = R.drawable.ic_notification,
+            title = "No pending requests",
+            description = "You have no incoming friend requests at the moment."
+        )
+
+        binding.emptyStateSearch.setupEmptyState(
+            iconRes = R.drawable.ic_search,
+            title = "No users found",
+            description = "We couldn't find any users matching your search."
+        )
     }
 
     private fun setupTabLayout() {

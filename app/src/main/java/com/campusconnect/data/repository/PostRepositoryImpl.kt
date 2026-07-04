@@ -413,4 +413,66 @@ class PostRepositoryImpl @Inject constructor(
             emit(Resource.Error(e.message ?: "Failed to fetch notes"))
         }
     }
+
+    override fun getRecentStoryAuthors(): Flow<Resource<List<com.campusconnect.domain.model.User>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val oneDayAgo = System.currentTimeMillis() - 24 * 60 * 60 * 1000
+            val snapshot = firestore.collection(Constants.COLLECTION_POSTS)
+                .whereGreaterThanOrEqualTo("createdAt", oneDayAgo)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .get()
+                .await()
+
+            val postsList = snapshot.toObjects(Post::class.java)
+            val distinctAuthors = postsList.distinctBy { it.authorId }.map { post ->
+                com.campusconnect.domain.model.User(
+                    uid = post.authorId,
+                    name = post.authorName,
+                    photoUrl = post.authorPhotoUrl
+                )
+            }
+            emit(Resource.Success(distinctAuthors))
+        } catch (e: java.lang.Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch recent story authors"))
+        }
+    }
+
+    override fun searchPosts(query: String): Flow<Resource<List<Post>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val currentUid = auth.currentUser?.uid
+            val snapshot = firestore.collection(Constants.COLLECTION_POSTS)
+                .orderBy(Constants.FIELD_CREATED_AT, Query.Direction.DESCENDING)
+                .limit(100)
+                .get()
+                .await()
+
+            val postsList = mutableListOf<Post>()
+            for (doc in snapshot.documents) {
+                val post = doc.toObject(Post::class.java)
+                if (post != null) {
+                    val matches = post.caption.contains(query, ignoreCase = true) ||
+                            post.authorName.contains(query, ignoreCase = true) ||
+                            post.authorUsername.contains(query, ignoreCase = true)
+                    
+                    if (matches) {
+                        val isLiked = if (currentUid != null) {
+                            firestore.collection(Constants.COLLECTION_POSTS)
+                                .document(post.postId)
+                                .collection(Constants.SUBCOLLECTION_LIKES)
+                                .document(currentUid)
+                                .get()
+                                .await()
+                                .exists()
+                        } else false
+                        postsList.add(post.copy(isLikedByCurrentUser = isLiked))
+                    }
+                }
+            }
+            emit(Resource.Success(postsList))
+        } catch (e: java.lang.Exception) {
+            emit(Resource.Error(e.message ?: "Failed to search posts"))
+        }
+    }
 }

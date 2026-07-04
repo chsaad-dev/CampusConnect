@@ -104,8 +104,17 @@ class PostAdapter(
 
                 // Actions wiring
                 btnLike.setOnClickListener {
+                    val newLiked = !post.isLikedByCurrentUser
                     onLikeClick(post)
-                    playLikeAnimation(ivLike)
+                    animateLike(ivLike, newLiked)
+                    
+                    // Optimistic update to count color and value to feel instantaneous
+                    tvLikeCount.text = (if (newLiked) post.likeCount + 1 else post.likeCount - 1).coerceAtLeast(0).toString()
+                    if (newLiked) {
+                        tvLikeCount.setTextColor(root.context.getColor(R.color.like_active))
+                    } else {
+                        tvLikeCount.setTextColor(root.context.getColor(R.color.text_secondary))
+                    }
                 }
                 btnComment.setOnClickListener { onCommentClick(post) }
                 btnShare.setOnClickListener { onShareClick(post) }
@@ -113,14 +122,19 @@ class PostAdapter(
             }
         }
 
-        private fun playLikeAnimation(imageView: android.widget.ImageView) {
-            val scaleUpX = android.animation.ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.4f, 1.0f)
-            val scaleUpY = android.animation.ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.4f, 1.0f)
-            val animatorSet = android.animation.AnimatorSet().apply {
-                playTogether(scaleUpX, scaleUpY)
-                duration = 300
+        private fun animateLike(view: android.widget.ImageView, liked: Boolean) {
+            view.setImageResource(if (liked) R.drawable.ic_like_filled else R.drawable.ic_like_outline)
+            if (liked) {
+                view.imageTintList = null
+            } else {
+                view.imageTintList = android.content.res.ColorStateList.valueOf(view.context.getColor(R.color.text_secondary))
             }
-            animatorSet.start()
+            view.animate()
+                .scaleX(1.3f).scaleY(1.3f)
+                .setDuration(120)
+                .withEndAction {
+                    view.animate().scaleX(1f).scaleY(1f).setDuration(120).start()
+                }.start()
         }
 
         private fun ItemPostCardBinding.setupMedia(post: Post) {

@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var notificationRepository: NotificationRepository
 
+    @Inject
+    lateinit var chatRepository: com.campusconnect.domain.repository.ChatRepository
+
     private val authViewModel: AuthViewModel by viewModels()
 
     private val sessionStartTime = System.currentTimeMillis()
@@ -63,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         com.campusconnect.core.common.AnalyticsHelper.logEvent("app_session_start")
 
         setupNavigation()
+        startUnreadCountListener()
         checkNotificationPermission()
         handleNotificationIntent(intent)
     }
@@ -85,11 +89,20 @@ class MainActivity : AppCompatActivity() {
 
         // Setup bottom navigation
         binding.bottomNavigation.setupWithNavController(navController)
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            if (item.itemId == R.id.createPostFragment) {
+                val bottomSheet = com.campusconnect.feature.post.CreatePostBottomSheetFragment()
+                bottomSheet.show(supportFragmentManager, "create_post")
+                false
+            } else {
+                androidx.navigation.ui.NavigationUI.onNavDestinationSelected(item, navController)
+            }
+        }
 
         // Show/hide bottom nav based on current destination
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.homeFragment, R.id.settingsFragment, R.id.friendsFragment, R.id.chatListFragment -> {
+                R.id.homeFragment, R.id.searchFragment, R.id.friendsFragment, R.id.chatListFragment, R.id.settingsFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
                     binding.navShadow.visibility = View.VISIBLE
                 }
@@ -186,6 +199,18 @@ class MainActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 // Navigation handling fallback
+            }
+        }
+    }
+
+    private fun startUnreadCountListener() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                chatRepository.getTotalUnreadCount().collectLatest { count ->
+                    val badge = binding.bottomNavigation.getOrCreateBadge(R.id.chatListFragment)
+                    badge.isVisible = count > 0
+                    badge.number = count
+                }
             }
         }
     }

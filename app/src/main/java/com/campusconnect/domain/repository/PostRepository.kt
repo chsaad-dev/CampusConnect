@@ -21,4 +21,6 @@ interface PostRepository {
     fun getLostFoundDetails(postId: String): Flow<Resource<LostFoundDetails>>
     fun getRideDetails(postId: String): Flow<Resource<RideDetails>>
     fun getAllNotes(): Flow<Resource<List<NoteDetails>>>
+    fun getRecentStoryAuthors(): Flow<Resource<List<com.campusconnect.domain.model.User>>>
+    fun searchPosts(query: String): Flow<Resource<List<Post>>>
 }
