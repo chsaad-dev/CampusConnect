@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@android:drawable/ic_menu_today"
+        android:icon="@drawable/ic_home"
         android:title="@string/menu_home" />
     <item
         android:id="@+id/friendsFragment"
-        android:icon="@android:drawable/ic_menu_myplaces"
+        android:icon="@drawable/ic_friends"
         android:title="@string/menu_friends" />
     <item
         android:id="@+id/chatListFragment"
-        android:icon="@android:drawable/ic_menu_send"
+        android:icon="@drawable/ic_chat"
         android:title="@string/menu_chats" />
     <item
         android:id="@+id/settingsFragment"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_settings"
         android:title="@string/menu_settings" />
 </menu>

@@ -12,6 +12,10 @@
         <item name="colorOnSecondary">@color/on_secondary</item>
         <item name="colorSecondaryContainer">@color/secondary_container</item>
 
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorOnTertiary">@color/on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container</item>
+
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">@color/on_background</item>
         <item name="colorSurface">@color/surface</item>
@@ -23,8 +27,36 @@
         <item name="colorOnError">@color/on_error</item>
         <item name="colorOutline">@color/outline</item>
 
-        <item name="android:statusBarColor">@color/primary_dark</item>
+        <!-- Status & Navigation Bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Default font family -->
+        <item name="android:fontFamily">sans-serif</item>
+
+        <!-- Component styles -->
+        <item name="materialCardViewStyle">@style/CampusConnect.Card</item>
+        <item name="tabStyle">@style/CampusConnect.TabLayout</item>
+        <item name="bottomNavigationStyle">@style/CampusConnect.BottomNavigation</item>
+
+        <!-- Shape appearances -->
+        <item name="shapeAppearanceSmallComponent">@style/CampusConnect.ShapeSmall</item>
+        <item name="shapeAppearanceMediumComponent">@style/CampusConnect.ShapeMedium</item>
+        <item name="shapeAppearanceLargeComponent">@style/CampusConnect.ShapeLarge</item>
+    </style>
+
+    <!-- Shape Appearances -->
+    <style name="CampusConnect.ShapeSmall" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">@dimen/corner_small</item>
+    </style>
+
+    <style name="CampusConnect.ShapeMedium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">@dimen/corner_medium</item>
+    </style>
+
+    <style name="CampusConnect.ShapeLarge" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSize">@dimen/corner_large</item>
     </style>
 
 </resources>

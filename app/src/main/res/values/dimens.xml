@@ -1,4 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_avatar_size">48dp</dimen>
+    <!-- Default avatar size (legacy compat) -->
+    <dimen name="default_avatar_size">40dp</dimen>
+
+    <!-- Spacing Tokens -->
+    <dimen name="spacing_xxs">2dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">48dp</dimen>
+
+    <!-- Corner Radius Tokens -->
+    <dimen name="corner_small">8dp</dimen>
+    <dimen name="corner_medium">16dp</dimen>
+    <dimen name="corner_large">24dp</dimen>
+    <dimen name="corner_pill">50dp</dimen>
+
+    <!-- Avatar Size Tokens -->
+    <dimen name="avatar_tiny">28dp</dimen>
+    <dimen name="avatar_small">32dp</dimen>
+    <dimen name="avatar_medium">44dp</dimen>
+    <dimen name="avatar_large">64dp</dimen>
+    <dimen name="avatar_xlarge">88dp</dimen>
+
+    <!-- Icon Sizes -->
+    <dimen name="icon_xs">16dp</dimen>
+    <dimen name="icon_sm">20dp</dimen>
+    <dimen name="icon_md">24dp</dimen>
+    <dimen name="icon_lg">32dp</dimen>
+    <dimen name="icon_xl">48dp</dimen>
+
+    <!-- Card Dimensions -->
+    <dimen name="card_elevation_flat">0dp</dimen>
+    <dimen name="card_elevation_low">2dp</dimen>
+    <dimen name="card_elevation_medium">4dp</dimen>
+    <dimen name="card_stroke_width">1dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+
+    <!-- Toolbar -->
+    <dimen name="toolbar_icon_size">24dp</dimen>
+    <dimen name="toolbar_avatar_size">32dp</dimen>
+
+    <!-- Bottom Navigation -->
+    <dimen name="bottom_nav_elevation">8dp</dimen>
+
+    <!-- Chat Bubble -->
+    <dimen name="bubble_corner_radius">18dp</dimen>
+    <dimen name="bubble_padding_h">14dp</dimen>
+    <dimen name="bubble_padding_v">10dp</dimen>
+    <dimen name="bubble_max_width">280dp</dimen>
+    <dimen name="bubble_image_size">200dp</dimen>
+
+    <!-- FAB -->
+    <dimen name="fab_margin">20dp</dimen>
+
+    <!-- Badge -->
+    <dimen name="badge_size">18dp</dimen>
+    <dimen name="badge_text_size">10sp</dimen>
+
+    <!-- Divider -->
+    <dimen name="divider_height">1dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="text_headline">22sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_subtitle">16sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_overline">11sp</dimen>
+    <dimen name="text_micro">10sp</dimen>
 </resources>

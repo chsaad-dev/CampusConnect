@@ -30,7 +30,7 @@ class CommentAdapter : ListAdapter<Comment, CommentAdapter.CommentViewHolder>(Co
                 tvAuthorName.text = comment.authorName
                 tvUsername.text = "@${comment.authorUsername}"
                 tvCommentText.text = comment.text
-                viewAvatar.loadAvatar(comment.authorPhotoUrl)
+                viewAvatar.loadAvatar(comment.authorPhotoUrl, comment.authorName)
 
                 val elapsed = DateUtils.getRelativeTimeSpanString(
                     comment.createdAt,

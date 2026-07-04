@@ -9,6 +9,17 @@
         android:id="@+id/iv_avatar"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@android:drawable/ic_menu_gallery" />
+        android:src="@drawable/ic_person" />
+
+    <TextView
+        android:id="@+id/tv_initials"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="JD" />
 
 </merge>

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:paddingHorizontal="@dimen/spacing_sm"
+    android:paddingVertical="@dimen/spacing_xs">
 
     <LinearLayout
         android:id="@+id/layout_bubble"
@@ -14,24 +15,25 @@
         android:layout_marginStart="64dp"
         android:orientation="vertical"
         android:background="@drawable/bg_bubble_sent"
-        android:paddingHorizontal="14dp"
-        android:paddingVertical="10dp">
+        android:paddingHorizontal="@dimen/bubble_padding_h"
+        android:paddingVertical="@dimen/bubble_padding_v">
 
         <ImageView
             android:id="@+id/iv_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/bubble_image_size"
+            android:layout_height="@dimen/bubble_image_size"
             android:scaleType="centerCrop"
             android:visibility="gone"
             android:contentDescription="Sent Image"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="@dimen/spacing_xs" />
 
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="@dimen/text_body"
             android:textColor="@color/white"
+            android:lineSpacingMultiplier="1.2"
             tools:text="Hey, sounds good. I'll join!" />
 
         <LinearLayout
@@ -39,13 +41,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="end"
-            android:layout_marginTop="4dp">
+            android:layout_marginTop="@dimen/spacing_xs">
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="@dimen/text_micro"
                 android:textColor="#D0FFFFFF"
                 tools:text="10:31 AM" />
 
@@ -53,7 +55,7 @@
                 android:id="@+id/tv_seen_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="@dimen/text_micro"
                 android:textColor="#D0FFFFFF"
                 android:layout_marginStart="6dp"
                 tools:text="Seen" />

@@ -28,9 +28,7 @@ data class UserDto(
     val friendsCount: Int = 0,
     val createdAt: Long = 0L,
     
-    @get:PropertyName("profileComplete")
-    @set:PropertyName("profileComplete")
-    var profileComplete: Boolean = false,
+    val profileComplete: Boolean = false,
     
     val viewedSubjects: List<String> = emptyList()
 ) {

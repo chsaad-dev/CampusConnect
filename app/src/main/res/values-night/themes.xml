@@ -6,9 +6,14 @@
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorOnPrimary">@color/dark_on_primary</item>
         <item name="colorPrimaryContainer">@color/dark_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/dark_on_primary_container</item>
 
-        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondary">@color/dark_secondary</item>
         <item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondaryContainer">@color/dark_secondary_container</item>
+
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorOnTertiary">@color/on_tertiary</item>
 
         <item name="android:colorBackground">@color/dark_background</item>
         <item name="colorOnBackground">@color/dark_on_background</item>
@@ -21,8 +26,23 @@
         <item name="colorOnError">@color/on_error</item>
         <item name="colorOutline">@color/dark_outline</item>
 
-        <item name="android:statusBarColor">@color/dark_background</item>
+        <!-- Status & Navigation Bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/dark_surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Default font family -->
+        <item name="android:fontFamily">sans-serif</item>
+
+        <!-- Component styles -->
+        <item name="materialCardViewStyle">@style/CampusConnect.Card</item>
+        <item name="tabStyle">@style/CampusConnect.TabLayout</item>
+        <item name="bottomNavigationStyle">@style/CampusConnect.BottomNavigation</item>
+
+        <!-- Shape appearances -->
+        <item name="shapeAppearanceSmallComponent">@style/CampusConnect.ShapeSmall</item>
+        <item name="shapeAppearanceMediumComponent">@style/CampusConnect.ShapeMedium</item>
+        <item name="shapeAppearanceLargeComponent">@style/CampusConnect.ShapeLarge</item>
     </style>
 
 </resources>

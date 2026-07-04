@@ -91,9 +91,11 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.homeFragment, R.id.settingsFragment, R.id.friendsFragment, R.id.chatListFragment -> {
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.navShadow.visibility = View.VISIBLE
                 }
                 else -> {
                     binding.bottomNavigation.visibility = View.GONE
+                    binding.navShadow.visibility = View.GONE
                 }
             }
         }

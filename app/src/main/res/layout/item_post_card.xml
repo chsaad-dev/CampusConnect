@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    android:layout_marginHorizontal="@dimen/spacing_md"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="@dimen/corner_medium"
+    app:cardElevation="@dimen/card_elevation_flat"
     app:strokeColor="?attr/colorOutline"
-    app:strokeWidth="1dp">
+    app:strokeWidth="@dimen/card_stroke_width"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/card_padding">
 
         <!-- Header: Author Details & Post Type -->
         <LinearLayout
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="@dimen/spacing_sm">
 
             <com.campusconnect.core.widgets.UserAvatarView
                 android:id="@+id/view_avatar"
@@ -36,33 +37,33 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginStart="12dp">
+                android:layout_marginStart="@dimen/spacing_sm">
 
                 <TextView
                     android:id="@+id/tv_author_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_body"
                     android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="?attr/colorOnSurface"
                     tools:text="Saad Fareedi" />
 
                 <TextView
                     android:id="@+id/tv_username_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/text_caption"
+                    android:textColor="@color/text_secondary"
+                    android:layout_marginTop="@dimen/spacing_xxs"
                     tools:text="\@saad_fareedi • 2h ago" />
             </LinearLayout>
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_post_type"
-                style="@style/Widget.Material3.Chip.Assist.Elevated"
+                style="@style/CampusConnect.Chip.PostType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="11sp"
-                app:chipMinHeight="28dp"
                 tools:text="NOTE" />
         </LinearLayout>
 
@@ -71,10 +72,10 @@
             android:id="@+id/tv_caption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="?android:attr/textColorPrimary"
-            android:lineSpacingMultiplier="1.2"
-            android:layout_marginBottom="12dp"
+            android:textSize="@dimen/text_body"
+            android:textColor="?attr/colorOnSurface"
+            android:lineSpacingMultiplier="1.3"
+            android:layout_marginBottom="@dimen/spacing_sm"
             tools:text="Here are the notes for Android Development. Hope it helps!" />
 
         <!-- Media Attachment Container -->
@@ -82,12 +83,12 @@
             android:id="@+id/media_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="@dimen/spacing_sm"
             android:visibility="gone"
             tools:visibility="visible">
 
-            <!-- Image View -->
-            <ImageView
+            <!-- Image View with rounded corners -->
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_post_image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -95,6 +96,7 @@
                 android:background="?attr/colorSurfaceVariant"
                 android:contentDescription="@null"
                 android:visibility="gone"
+                app:shapeAppearance="@style/CampusConnect.ShapeSmall"
                 tools:visibility="visible" />
 
             <!-- Document Card (PDF/DOCX/PPT) -->
@@ -103,17 +105,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="@dimen/corner_small"
                 app:cardElevation="0dp"
                 app:strokeColor="?attr/colorOutline"
-                app:strokeWidth="1dp"
+                app:strokeWidth="@dimen/card_stroke_width"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 tools:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="16dp"
+                    android:padding="@dimen/card_padding"
                     android:gravity="center_vertical">
 
                     <ImageView
@@ -121,6 +124,7 @@
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:src="@android:drawable/ic_menu_save"
+                        app:tint="?attr/colorPrimary"
                         android:contentDescription="@null" />
 
                     <LinearLayout
@@ -128,29 +132,30 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_marginStart="@dimen/spacing_sm">
 
                         <TextView
                             android:id="@+id/tv_doc_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
+                            android:textSize="@dimen/text_body"
                             android:textStyle="bold"
-                            android:textColor="?android:attr/textColorPrimary"
+                            android:textColor="?attr/colorOnSurface"
                             tools:text="lecture_notes.pdf" />
 
                         <TextView
                             android:id="@+id/tv_doc_type"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="@dimen/text_caption"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="@dimen/spacing_xxs"
                             tools:text="PDF Document" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Video Player stub (Media3 PlayerView placeholder) -->
+            <!-- Video Player stub -->
             <FrameLayout
                 android:id="@+id/video_placeholder"
                 android:layout_width="match_parent"
@@ -164,20 +169,25 @@
                     android:layout_height="48dp"
                     android:layout_gravity="center"
                     android:src="@android:drawable/ic_media_play"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     android:contentDescription="@null" />
             </FrameLayout>
 
         </FrameLayout>
+
+        <!-- Divider above actions -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_height"
+            android:background="@color/divider"
+            android:layout_marginBottom="@dimen/spacing_sm" />
 
         <!-- Actions Panel: Like, Comment, Share -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingTop="8dp"
-            android:divider="?android:attr/dividerVertical"
-            android:showDividers="none">
+            android:gravity="center_vertical">
 
             <!-- Like Button -->
             <LinearLayout
@@ -188,14 +198,16 @@
                 android:gravity="center_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="8dp"
+                android:paddingVertical="@dimen/spacing_xs"
+                android:paddingEnd="@dimen/spacing_sm"
                 android:background="?attr/selectableItemBackground">
 
                 <ImageView
                     android:id="@+id/iv_like"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/btn_star_big_off"
+                    android:layout_width="@dimen/icon_sm"
+                    android:layout_height="@dimen/icon_sm"
+                    android:src="@drawable/ic_like_outline"
+                    app:tint="@color/text_secondary"
                     android:contentDescription="@null" />
 
                 <TextView
@@ -203,8 +215,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:textSize="13sp"
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/text_caption"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_secondary"
                     tools:text="12" />
             </LinearLayout>
 
@@ -217,14 +230,16 @@
                 android:gravity="center_vertical"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_marginStart="24dp"
-                android:padding="8dp"
+                android:layout_marginStart="@dimen/spacing_lg"
+                android:paddingVertical="@dimen/spacing_xs"
+                android:paddingEnd="@dimen/spacing_sm"
                 android:background="?attr/selectableItemBackground">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@android:drawable/sym_action_chat"
+                    android:layout_width="@dimen/icon_sm"
+                    android:layout_height="@dimen/icon_sm"
+                    android:src="@drawable/ic_comment"
+                    app:tint="@color/text_secondary"
                     android:contentDescription="@null" />
 
                 <TextView
@@ -232,8 +247,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:textSize="13sp"
-                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="@dimen/text_caption"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_secondary"
                     tools:text="4" />
             </LinearLayout>
 
@@ -245,14 +261,15 @@
             <!-- Share Button -->
             <ImageView
                 android:id="@+id/btn_share"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/ic_menu_share"
+                android:layout_width="@dimen/icon_md"
+                android:layout_height="@dimen/icon_md"
+                android:src="@drawable/ic_share"
+                app:tint="@color/text_secondary"
                 android:contentDescription="@null"
-                android:padding="4dp"
+                android:padding="2dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground" />
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
 
