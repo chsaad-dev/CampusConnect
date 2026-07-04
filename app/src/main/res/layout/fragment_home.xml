@@ -23,6 +23,20 @@
             app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
             app:titleTextColor="?attr/colorPrimary">
 
+            <!-- Search posts icon -->
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/spacing_md"
+                android:src="@drawable/ic_search"
+                app:tint="?attr/colorOnSurfaceVariant"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Search posts"
+                android:clickable="true"
+                android:focusable="true" />
+
             <!-- Notification bell icon at end -->
             <ImageView
                 android:id="@+id/iv_notification"

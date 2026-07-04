@@ -124,6 +124,10 @@ class HomeFragment : Fragment() {
             viewModel.loadInitialFeed()
         }
 
+        binding.ivSearch.setOnClickListener {
+            findNavController().navigate(R.id.searchFragment)
+        }
+
         binding.fabCreatePost.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
         }
