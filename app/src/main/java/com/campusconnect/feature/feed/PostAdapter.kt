@@ -68,31 +68,35 @@ class PostAdapter(
                 tvCommentCount.text = post.commentCount.toString()
 
                 // Load avatar
-                viewAvatar.loadAvatar(post.authorPhotoUrl)
+                viewAvatar.loadAvatar(post.authorPhotoUrl, post.authorName)
 
                 // Setup post type chip color-coding
                 chipPostType.text = post.type.name
                 val chipColor = when (post.type) {
-                    PostType.NOTE -> root.context.getColor(R.color.notes_green)
-                    PostType.BLOOD -> root.context.getColor(R.color.blood_red)
-                    PostType.LOST_FOUND -> root.context.getColor(R.color.lost_found_orange)
-                    PostType.RIDE -> root.context.getColor(R.color.ride_blue)
+                    PostType.NOTE -> root.context.getColor(R.color.chip_note_text)
+                    PostType.BLOOD -> root.context.getColor(R.color.chip_blood_text)
+                    PostType.LOST_FOUND -> root.context.getColor(R.color.chip_lostfound_text)
+                    PostType.RIDE -> root.context.getColor(R.color.chip_ride_text)
                 }
                 val chipBgColor = when (post.type) {
-                    PostType.NOTE -> root.context.getColor(R.color.primary_container)
-                    PostType.BLOOD -> android.graphics.Color.parseColor("#FFEAEA")
-                    PostType.LOST_FOUND -> android.graphics.Color.parseColor("#FFF3E0")
-                    PostType.RIDE -> android.graphics.Color.parseColor("#E0F7FA")
+                    PostType.NOTE -> root.context.getColor(R.color.chip_note_bg)
+                    PostType.BLOOD -> root.context.getColor(R.color.chip_blood_bg)
+                    PostType.LOST_FOUND -> root.context.getColor(R.color.chip_lostfound_bg)
+                    PostType.RIDE -> root.context.getColor(R.color.chip_ride_bg)
                 }
                 chipPostType.setTextColor(chipColor)
                 chipPostType.chipBackgroundColor = android.content.res.ColorStateList.valueOf(chipBgColor)
                 chipPostType.chipStrokeWidth = 0f
 
-                // Like status color
+                // Like status icon
                 if (post.isLikedByCurrentUser) {
-                    ivLike.setImageResource(android.R.drawable.btn_star_big_on)
+                    ivLike.setImageResource(R.drawable.ic_like_filled)
+                    ivLike.imageTintList = null
+                    tvLikeCount.setTextColor(root.context.getColor(R.color.like_active))
                 } else {
-                    ivLike.setImageResource(android.R.drawable.btn_star_big_off)
+                    ivLike.setImageResource(R.drawable.ic_like_outline)
+                    ivLike.imageTintList = android.content.res.ColorStateList.valueOf(root.context.getColor(R.color.text_secondary))
+                    tvLikeCount.setTextColor(root.context.getColor(R.color.text_secondary))
                 }
 
                 // Media layout setups

@@ -5,22 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurfaceVariant">
 
-    <!-- Top Toolbar -->
+    <!-- Top Toolbar with avatar and name -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
-        
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="Chat" />
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="Chat"
+            app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <!-- Messages area -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -38,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="8dp" />
+            android:padding="@dimen/spacing_sm" />
 
     </FrameLayout>
 
@@ -47,11 +56,11 @@
         android:id="@+id/tv_typing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="4dp"
-        android:textSize="12sp"
+        android:layout_marginStart="@dimen/spacing_md"
+        android:layout_marginBottom="@dimen/spacing_xs"
+        android:textSize="@dimen/text_caption"
         android:textStyle="italic"
-        android:textColor="?android:attr/textColorSecondary"
+        android:textColor="@color/text_secondary"
         android:visibility="gone"
         tools:visibility="visible"
         tools:text="Alice is typing..." />
@@ -61,15 +70,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:paddingHorizontal="@dimen/spacing_sm"
+        android:paddingVertical="@dimen/spacing_sm"
         android:gravity="center_vertical"
         android:background="?attr/colorSurface">
 
         <ImageButton
             android:id="@+id/btn_attach"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_add"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_attach"
+            app:tint="?attr/colorOnSurfaceVariant"
             android:contentDescription="Attach Image"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
@@ -77,23 +88,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            app:hintEnabled="false">
-            
+            android:layout_marginHorizontal="@dimen/spacing_sm"
+            style="@style/CampusConnect.TextInput.Rounded"
+            app:hintEnabled="false"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="1dp">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Type a message..."
                 android:inputType="textShortMessage|textCapSentences|textMultiLine"
-                android:maxLines="4" />
+                android:maxLines="4"
+                android:textSize="@dimen/text_body"
+                android:paddingVertical="@dimen/spacing_sm" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/btn_send"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_send"
             android:contentDescription="Send Message"
             app:tint="?attr/colorPrimary"
             android:background="?attr/selectableItemBackgroundBorderless" />

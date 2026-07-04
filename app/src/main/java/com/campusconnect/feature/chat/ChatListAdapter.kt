@@ -53,8 +53,9 @@ class ChatListAdapter(
 
             Glide.with(binding.ivAvatar.context)
                 .load(otherPhotoUrl)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .circleCrop()
                 .into(binding.ivAvatar)
 
             binding.root.setOnClickListener {

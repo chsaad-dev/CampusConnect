@@ -5,15 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface"
-    android:padding="16dp">
+    android:background="?attr/colorSurfaceVariant"
+    android:padding="@dimen/spacing_lg">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
         app:title="Ride Details"
-        app:navigationIcon="?attr/homeAsUpIndicator" />
+        app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        android:layout_marginBottom="@dimen/spacing_md" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -22,13 +25,11 @@
         android:layout_gravity="center"
         android:visibility="gone" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/content_card"
+        style="@style/CampusConnect.Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -36,13 +37,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="@dimen/card_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:gravity="center_vertical">
                 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -54,15 +56,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="From:"
-                        android:textSize="12sp"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textSize="@dimen/text_caption"
+                        android:textColor="@color/text_secondary" />
 
                     <TextView
                         android:id="@+id/tv_from"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/text_subtitle"
                         android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="?attr/colorOnSurface"
                         tools:text="Campus Main Gate" />
                 </LinearLayout>
 
@@ -84,24 +88,32 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="To:"
-                        android:textSize="12sp"
-                        android:textColor="?android:attr/textColorSecondary" />
+                        android:textSize="@dimen/text_caption"
+                        android:textColor="@color/text_secondary" />
 
                     <TextView
                         android:id="@+id/tv_to"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/text_subtitle"
                         android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:textColor="?attr/colorOnSurface"
                         tools:text="City Center Mall" />
                 </LinearLayout>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="@color/divider"
+                android:layout_marginBottom="@dimen/spacing_md" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="@dimen/spacing_lg">
 
                 <TextView
                     android:id="@+id/tv_seats"
@@ -111,6 +123,8 @@
                     app:drawableStartCompat="@android:drawable/ic_menu_myplaces"
                     android:gravity="center_vertical"
                     android:layout_marginEnd="24dp"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="?attr/colorOnSurface"
                     tools:text="3 / 4 Seats Left" />
 
                 <TextView
@@ -120,16 +134,20 @@
                     android:drawablePadding="4dp"
                     app:drawableStartCompat="@android:drawable/ic_menu_info_details"
                     android:gravity="center_vertical"
+                    android:textSize="@dimen/text_body"
+                    android:textColor="?attr/colorOnSurface"
                     tools:text="Rs. 50" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_request_seat"
+                style="@style/CampusConnect.Button.Primary"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:text="Request Seat"
-                app:icon="@android:drawable/ic_menu_add" />
+                app:icon="@android:drawable/ic_menu_add"
+                app:iconTint="@color/white" />
 
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

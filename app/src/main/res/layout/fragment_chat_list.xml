@@ -5,13 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurfaceVariant">
 
+    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="Messages" />
+        android:background="?attr/colorSurface"
+        app:title="Messages"
+        app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
+        app:titleTextColor="?attr/colorOnSurface">
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/spacing_md"
+            android:src="@drawable/ic_search"
+            app:tint="?attr/colorOnSurfaceVariant"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Search chats"
+            android:clickable="true"
+            android:focusable="true" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -28,8 +52,9 @@
             android:id="@+id/rv_chats"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:clipToPadding="false" />
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/spacing_xs"
+            android:paddingBottom="@dimen/spacing_sm" />
 
         <com.campusconnect.core.widgets.EmptyStateView
             android:id="@+id/empty_state"

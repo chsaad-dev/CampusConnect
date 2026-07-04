@@ -107,7 +107,7 @@ class SettingsFragment : Fragment() {
                         binding.tvProfileReputation.text = user.reputationPoints.toString()
                         binding.tvProfilePosts.text = "4"
                         
-                        binding.viewProfileAvatar.loadAvatar(user.photoUrl)
+                        binding.viewProfileAvatar.loadAvatar(user.photoUrl, user.name)
 
                         if (user.role == UserRole.ADMIN) {
                             binding.cardAdmin.visibility = View.VISIBLE
