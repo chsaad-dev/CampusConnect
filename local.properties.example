@@ -1,0 +1,4 @@
+# Cloudinary configuration details.
+# Copy this file as 'local.properties' and fill in your details:
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_UPLOAD_PRESET=your_unsigned_preset
