@@ -75,6 +75,16 @@ class AdminDashboardFragment : Fragment() {
             findNavController().navigateUp()
         }
 
+        binding.toolbar.inflateMenu(com.campusconnect.R.menu.admin_menu)
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            if (item.itemId == com.campusconnect.R.id.action_scan_ticket) {
+                findNavController().navigate(com.campusconnect.R.id.ticketScannerFragment)
+                true
+            } else {
+                false
+            }
+        }
+
         setupTabLayout()
         setupComplaintsTab()
         setupEventsTab()

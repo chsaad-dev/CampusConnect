@@ -30,7 +30,9 @@ data class UserDto(
     
     val profileComplete: Boolean = false,
     
-    val viewedSubjects: List<String> = emptyList()
+    val viewedSubjects: List<String> = emptyList(),
+    @get:PropertyName("isOnline") @set:PropertyName("isOnline") var isOnline: Boolean = false,
+    val lastActiveAt: Long = 0L
 ) {
     /**
      * Converts DTO to domain model.
@@ -55,7 +57,9 @@ data class UserDto(
         friendsCount = friendsCount,
         createdAt = createdAt,
         profileComplete = profileComplete,
-        viewedSubjects = viewedSubjects
+        viewedSubjects = viewedSubjects,
+        isOnline = isOnline,
+        lastActiveAt = lastActiveAt
     )
 
     companion object {
@@ -82,7 +86,9 @@ data class UserDto(
             friendsCount = user.friendsCount,
             createdAt = user.createdAt,
             profileComplete = user.profileComplete,
-            viewedSubjects = user.viewedSubjects
+            viewedSubjects = user.viewedSubjects,
+            isOnline = user.isOnline,
+            lastActiveAt = user.lastActiveAt
         )
     }
 }

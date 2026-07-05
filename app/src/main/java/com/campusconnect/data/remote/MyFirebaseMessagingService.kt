@@ -44,6 +44,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             type = type,
             refId = refId
         )
+
+        com.campusconnect.core.common.NotificationEventBus.postEvent(title, body, type, refId)
     }
 
     companion object {

@@ -8,7 +8,9 @@ import com.campusconnect.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.campusconnect.domain.repository.MediaRepository
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -167,5 +169,23 @@ class UserRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             emit(Resource.Error(e.message ?: "Failed to track subject view"))
         }
+    }
+
+    override fun observeUserPresence(uid: String): Flow<User?> = callbackFlow {
+        val listener = firestore.collection(Constants.COLLECTION_USERS)
+            .document(uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    trySend(null)
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val userDto = snapshot.toObject(UserDto::class.java)
+                    trySend(userDto?.toDomain())
+                } else {
+                    trySend(null)
+                }
+            }
+        awaitClose { listener.remove() }
     }
 }

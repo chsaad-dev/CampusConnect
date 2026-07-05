@@ -19,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
+    private val userRepository: com.campusconnect.domain.repository.UserRepository,
     private val auth: FirebaseAuth
 ) : ViewModel() {
 
@@ -36,6 +37,15 @@ class ChatViewModel @Inject constructor(
 
     private val _typingStatus = MutableStateFlow<Map<String, Boolean>>(emptyMap())
     val typingStatus: StateFlow<Map<String, Boolean>> = _typingStatus.asStateFlow()
+
+    private val _otherUserPresence = MutableStateFlow<com.campusconnect.domain.model.User?>(null)
+    val otherUserPresence: StateFlow<com.campusconnect.domain.model.User?> = _otherUserPresence.asStateFlow()
+
+    fun observeOtherUserPresence(uid: String) {
+        userRepository.observeUserPresence(uid).onEach { user ->
+            _otherUserPresence.value = user
+        }.launchIn(viewModelScope)
+    }
 
     private var chatsJob: kotlinx.coroutines.Job? = null
 

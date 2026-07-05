@@ -23,5 +23,7 @@ data class User(
     val friendsCount: Int = 0,
     val createdAt: Long = 0L,
     val profileComplete: Boolean = false,
-    val viewedSubjects: List<String> = emptyList()
+    val viewedSubjects: List<String> = emptyList(),
+    val isOnline: Boolean = false,
+    val lastActiveAt: Long = 0L
 )

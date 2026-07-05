@@ -151,6 +151,7 @@ class ChatFragment : Fragment() {
 
                                 viewModel.loadMessages(chat.chatId)
                                 viewModel.listenToTypingStatus(chat.chatId)
+                                viewModel.observeOtherUserPresence(otherUid)
                             }
                             is Resource.Error -> {
                                 binding.progressBar.hide()
@@ -191,6 +192,17 @@ class ChatFragment : Fragment() {
                             binding.tvTyping.show()
                         } else {
                             binding.tvTyping.hide()
+                        }
+                    }
+                }
+
+                // 4. Observe Other User Presence (Online/Offline status subtitle)
+                launch {
+                    viewModel.otherUserPresence.collectLatest { user ->
+                        if (user != null) {
+                            binding.toolbar.subtitle = if (user.isOnline) "Online" else "Offline"
+                        } else {
+                            binding.toolbar.subtitle = null
                         }
                     }
                 }

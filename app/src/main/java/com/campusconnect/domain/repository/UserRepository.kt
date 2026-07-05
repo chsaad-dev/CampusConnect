@@ -16,4 +16,5 @@ interface UserRepository {
     fun completeProfile(user: User, imageUri: android.net.Uri? = null): Flow<Resource<Unit>>
     fun isProfileComplete(uid: String): Flow<Resource<Boolean>>
     fun trackSubjectView(subject: String): Flow<Resource<Unit>>
+    fun observeUserPresence(uid: String): Flow<User?>
 }

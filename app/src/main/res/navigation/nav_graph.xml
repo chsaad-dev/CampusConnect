@@ -380,6 +380,12 @@
             android:label="Admin Control Panel"
             tools:layout="@layout/fragment_admin_dashboard" />
 
+        <fragment
+            android:id="@+id/ticketScannerFragment"
+            android:name="com.campusconnect.feature.events.TicketScannerFragment"
+            android:label="Scan Ticket"
+            tools:layout="@layout/fragment_ticket_scanner" />
+
     </navigation>
 
 </navigation>

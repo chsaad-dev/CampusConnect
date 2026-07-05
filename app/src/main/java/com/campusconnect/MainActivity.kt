@@ -43,6 +43,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var chatRepository: com.campusconnect.domain.repository.ChatRepository
 
+    @Inject
+    lateinit var firestore: com.google.firebase.firestore.FirebaseFirestore
+
     private val authViewModel: AuthViewModel by viewModels()
 
     private val sessionStartTime = System.currentTimeMillis()
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         setupNavigation()
         startUnreadCountListener()
+        startInAppNotificationListener()
         checkNotificationPermission()
         handleNotificationIntent(intent)
     }
@@ -210,6 +214,50 @@ class MainActivity : AppCompatActivity() {
                     val badge = binding.bottomNavigation.getOrCreateBadge(R.id.chatListFragment)
                     badge.isVisible = count > 0
                     badge.number = count
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateOnlineStatus(true)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        updateOnlineStatus(false)
+    }
+
+    private fun updateOnlineStatus(isOnline: Boolean) {
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+        if (uid != null) {
+            firestore.collection(com.campusconnect.core.common.Constants.COLLECTION_USERS)
+                .document(uid)
+                .update("isOnline", isOnline, "lastActiveAt", System.currentTimeMillis())
+        }
+    }
+
+    private fun startInAppNotificationListener() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                com.campusconnect.core.common.NotificationEventBus.events.collectLatest { event ->
+                    com.campusconnect.core.widgets.InAppNotificationManager.showNotification(
+                        activity = this@MainActivity,
+                        title = event.title,
+                        body = event.body,
+                        avatarUrl = "",
+                        onClick = {
+                            if (event.type == "chat" && event.refId.isNotEmpty()) {
+                                val bundle = Bundle().apply {
+                                    putString("chatId", event.refId)
+                                }
+                                navController.navigate(R.id.chatFragment, bundle)
+                            } else if (event.type == "friend_request") {
+                                navController.navigate(R.id.friendsFragment)
+                            }
+                        }
+                    )
                 }
             }
         }

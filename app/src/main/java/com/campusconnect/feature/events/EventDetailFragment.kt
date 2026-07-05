@@ -88,7 +88,12 @@ class EventDetailFragment : Fragment() {
                                 if (event.registeredUsers.contains(currentUid)) {
                                     binding.btnRegister.hide()
                                     binding.cardTicket.show()
-                                    binding.tvTicketId.text = "Ticket ID: ${event.qrCode}_${currentUid.take(5)}"
+                                    val ticketData = "${event.qrCode}_${currentUid.take(5)}"
+                                    binding.tvTicketId.text = "Ticket ID: $ticketData"
+                                    val qrBitmap = com.campusconnect.core.utils.QrCodeGenerator.generateQrCode(ticketData)
+                                    if (qrBitmap != null) {
+                                        binding.ivQr.setImageBitmap(qrBitmap)
+                                    }
                                 } else {
                                     binding.btnRegister.show()
                                     binding.cardTicket.hide()
