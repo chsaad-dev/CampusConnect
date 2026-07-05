@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
+import com.campusconnect.domain.repository.MediaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -27,7 +27,7 @@ import javax.inject.Singleton
 class PostRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val mediaRepository: MediaRepository
 ) : PostRepository {
 
     override fun getFeed(lastVisibleTimestamp: Long?, limit: Int): Flow<Resource<List<Post>>> = flow {
@@ -82,11 +82,11 @@ class PostRepositoryImpl @Inject constructor(
 
             // 1. Upload media if present
             if (fileUri != null) {
-                val extension = fileUri.toString().substringAfterLast(".", "bin")
-                val filename = "${System.currentTimeMillis()}.$extension"
-                val storageRef = storage.reference.child("posts/$newPostId/media/$filename")
-                storageRef.putFile(fileUri).await()
-                val downloadUrl = storageRef.downloadUrl.await().toString()
+                val downloadUrl = when (post.mediaType) {
+                    com.campusconnect.domain.model.MediaType.IMAGE -> mediaRepository.uploadImage(fileUri)
+                    com.campusconnect.domain.model.MediaType.VIDEO -> mediaRepository.uploadVideo(fileUri)
+                    else -> mediaRepository.uploadDocument(fileUri)
+                }
                 mediaUrls.add(downloadUrl)
             }
 

@@ -8,7 +8,7 @@ import com.campusconnect.domain.repository.ComplaintRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
+import com.campusconnect.domain.repository.MediaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -19,7 +19,7 @@ import javax.inject.Singleton
 class ComplaintRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val mediaRepository: MediaRepository
 ) : ComplaintRepository {
 
     private val currentUid: String
@@ -33,11 +33,7 @@ class ComplaintRepositoryImpl @Inject constructor(
             var uploadUrl = ""
 
             if (imageUri != null) {
-                val extension = imageUri.toString().substringAfterLast(".", "jpg")
-                val filename = "${System.currentTimeMillis()}.$extension"
-                val storageRef = storage.reference.child("complaints/$complaintId/$filename")
-                storageRef.putFile(imageUri).await()
-                uploadUrl = storageRef.downloadUrl.await().toString()
+                uploadUrl = mediaRepository.uploadImage(imageUri)
             }
 
             val finalComplaint = complaint.copy(

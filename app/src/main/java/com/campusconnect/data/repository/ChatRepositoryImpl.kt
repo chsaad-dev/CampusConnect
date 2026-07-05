@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
+import com.campusconnect.domain.repository.MediaRepository
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,7 +24,7 @@ import javax.inject.Singleton
 class ChatRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val mediaRepository: MediaRepository
 ) : ChatRepository {
 
     private val currentUid: String
@@ -86,11 +86,12 @@ class ChatRepositoryImpl @Inject constructor(
 
             // 1. Upload media if present
             if (mediaUri != null) {
-                val extension = mediaUri.toString().substringAfterLast(".", "jpg")
-                val filename = "${System.currentTimeMillis()}.$extension"
-                val storageRef = storage.reference.child("chats/$chatId/media/$filename")
-                storageRef.putFile(mediaUri).await()
-                uploadUrl = storageRef.downloadUrl.await().toString()
+                val downloadUrl = when (mediaType) {
+                    "image" -> mediaRepository.uploadImage(mediaUri)
+                    "video" -> mediaRepository.uploadVideo(mediaUri)
+                    else -> mediaRepository.uploadDocument(mediaUri)
+                }
+                uploadUrl = downloadUrl
             }
 
             val message = Message(

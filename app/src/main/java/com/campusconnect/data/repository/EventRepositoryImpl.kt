@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.storage.FirebaseStorage
+import com.campusconnect.domain.repository.MediaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 class EventRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val mediaRepository: MediaRepository
 ) : EventRepository {
 
     private val currentUid: String
@@ -78,11 +78,7 @@ class EventRepositoryImpl @Inject constructor(
             var uploadUrl = ""
 
             if (bannerUri != null) {
-                val extension = bannerUri.toString().substringAfterLast(".", "jpg")
-                val filename = "${System.currentTimeMillis()}.$extension"
-                val storageRef = storage.reference.child("events/$eventId/$filename")
-                storageRef.putFile(bannerUri).await()
-                uploadUrl = storageRef.downloadUrl.await().toString()
+                uploadUrl = mediaRepository.uploadImage(bannerUri)
             }
 
             val finalEvent = event.copy(

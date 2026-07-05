@@ -1,6 +1,8 @@
 package com.campusconnect.core.di
 
 import com.campusconnect.data.repository.AuthRepositoryImpl
+import com.campusconnect.data.repository.CloudinaryMediaRepository
+import com.campusconnect.domain.repository.MediaRepository
 import com.campusconnect.data.repository.ChatRepositoryImpl
 import com.campusconnect.data.repository.ComplaintRepositoryImpl
 import com.campusconnect.data.repository.EventRepositoryImpl
@@ -81,4 +83,10 @@ abstract class RepositoryModule {
     abstract fun bindNotificationRepository(
         impl: NotificationRepositoryImpl
     ): NotificationRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMediaRepository(
+        impl: CloudinaryMediaRepository
+    ): MediaRepository
 }

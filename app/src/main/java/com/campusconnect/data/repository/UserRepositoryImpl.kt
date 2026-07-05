@@ -7,7 +7,7 @@ import com.campusconnect.domain.model.User
 import com.campusconnect.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
+import com.campusconnect.domain.repository.MediaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 class UserRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val storage: FirebaseStorage
+    private val mediaRepository: MediaRepository
 ) : UserRepository {
 
     override fun getUserById(uid: String): Flow<Resource<User>> = flow {
@@ -110,9 +110,7 @@ class UserRepositoryImpl @Inject constructor(
         try {
             var updatedUser = user.copy(profileComplete = true)
             if (imageUri != null) {
-                val ref = storage.reference.child("avatars/${user.uid}.jpg")
-                ref.putFile(imageUri).await()
-                val url = ref.downloadUrl.await().toString()
+                val url = mediaRepository.uploadImage(imageUri)
                 updatedUser = updatedUser.copy(photoUrl = url)
             }
 
