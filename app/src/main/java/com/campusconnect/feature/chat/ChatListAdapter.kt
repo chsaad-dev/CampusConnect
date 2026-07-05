@@ -58,21 +58,25 @@ class ChatListAdapter(
                 .circleCrop()
                 .into(binding.ivAvatar)
 
-            val userRef = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-                .collection("users")
-                .document(otherUid)
-
             (binding.root.tag as? com.google.firebase.firestore.ListenerRegistration)?.remove()
 
-            val registration = userRef.addSnapshotListener { snapshot, _ ->
-                if (snapshot != null) {
-                    val isOnline = snapshot.getBoolean("isOnline") ?: false
-                    binding.viewOnlineDot.visibility = if (isOnline) android.view.View.VISIBLE else android.view.View.GONE
-                } else {
-                    binding.viewOnlineDot.visibility = android.view.View.GONE
+            if (otherUid.isNotBlank()) {
+                val userRef = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(otherUid)
+
+                val registration = userRef.addSnapshotListener { snapshot, _ ->
+                    if (snapshot != null) {
+                        val isOnline = snapshot.getBoolean("isOnline") ?: false
+                        binding.viewOnlineDot.visibility = if (isOnline) android.view.View.VISIBLE else android.view.View.GONE
+                    } else {
+                        binding.viewOnlineDot.visibility = android.view.View.GONE
+                    }
                 }
+                binding.root.tag = registration
+            } else {
+                binding.viewOnlineDot.visibility = android.view.View.GONE
             }
-            binding.root.tag = registration
 
             binding.root.setOnClickListener {
                 onChatClick(chat, otherUid, otherName)

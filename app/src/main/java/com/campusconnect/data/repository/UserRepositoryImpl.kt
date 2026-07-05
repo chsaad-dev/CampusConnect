@@ -172,6 +172,11 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun observeUserPresence(uid: String): Flow<User?> = callbackFlow {
+        if (uid.isBlank()) {
+            trySend(null)
+            close()
+            return@callbackFlow
+        }
         val listener = firestore.collection(Constants.COLLECTION_USERS)
             .document(uid)
             .addSnapshotListener { snapshot, error ->
