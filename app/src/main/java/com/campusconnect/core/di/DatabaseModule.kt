@@ -37,4 +37,22 @@ object DatabaseModule {
     fun provideBookmarkDao(database: AppDatabase): BookmarkDao {
         return database.bookmarkDao()
     }
+
+    @Provides
+    @Singleton
+    fun providePostDao(database: AppDatabase): com.campusconnect.data.local.PostDao {
+        return database.postDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEventDao(database: AppDatabase): com.campusconnect.data.local.EventDao {
+        return database.eventDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideJobDao(database: AppDatabase): com.campusconnect.data.local.JobDao {
+        return database.jobDao()
+    }
 }

@@ -20,14 +20,20 @@ import javax.inject.Singleton
 class EventRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
+    private val eventDao: com.campusconnect.data.local.EventDao
 ) : EventRepository {
 
     private val currentUid: String
         get() = auth.currentUser?.uid ?: throw Exception("User not logged in")
 
     override fun getEvents(): Flow<Resource<List<Event>>> = flow {
-        emit(Resource.Loading)
+        val cached = eventDao.getCachedEvents()
+        if (cached.isNotEmpty()) {
+            emit(Resource.Success(cached.map { it.toDomain() }))
+        } else {
+            emit(Resource.Loading)
+        }
         try {
             val snapshot = firestore.collection(Constants.COLLECTION_EVENTS)
                 .orderBy("date", Query.Direction.ASCENDING)
@@ -35,9 +41,16 @@ class EventRepositoryImpl @Inject constructor(
                 .await()
 
             val events = snapshot.toObjects(Event::class.java)
+
+            eventDao.clearAllEvents()
+            eventDao.insertEvents(events.map { com.campusconnect.data.model.EventEntity.fromDomain(it) })
+
             emit(Resource.Success(events))
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Failed to fetch events"))
+            val cachedAgain = eventDao.getCachedEvents()
+            if (cachedAgain.isEmpty()) {
+                emit(Resource.Error(e.message ?: "Failed to fetch events"))
+            }
         }
     }
 

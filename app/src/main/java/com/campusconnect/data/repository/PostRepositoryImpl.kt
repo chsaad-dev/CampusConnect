@@ -27,11 +27,21 @@ import javax.inject.Singleton
 class PostRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
-    private val mediaRepository: MediaRepository
+    private val mediaRepository: MediaRepository,
+    private val postDao: com.campusconnect.data.local.PostDao
 ) : PostRepository {
 
     override fun getFeed(lastVisibleTimestamp: Long?, limit: Int): Flow<Resource<List<Post>>> = flow {
-        emit(Resource.Loading)
+        if (lastVisibleTimestamp == null) {
+            val cachedEntities = postDao.getCachedPosts()
+            if (cachedEntities.isNotEmpty()) {
+                emit(Resource.Success(cachedEntities.map { it.toDomain() }))
+            } else {
+                emit(Resource.Loading)
+            }
+        } else {
+            emit(Resource.Loading)
+        }
         try {
             val currentUid = auth.currentUser?.uid
             var query = firestore.collection(Constants.COLLECTION_POSTS)
@@ -48,7 +58,6 @@ class PostRepositoryImpl @Inject constructor(
             for (doc in snapshot.documents) {
                 val post = doc.toObject(Post::class.java)
                 if (post != null) {
-                    // Check if current user liked this post
                     val isLiked = if (currentUid != null) {
                         firestore.collection(Constants.COLLECTION_POSTS)
                             .document(post.postId)
@@ -62,9 +71,18 @@ class PostRepositoryImpl @Inject constructor(
                     postsList.add(post.copy(isLikedByCurrentUser = isLiked))
                 }
             }
+
+            if (lastVisibleTimestamp == null) {
+                postDao.clearAllPosts()
+                postDao.insertPosts(postsList.map { com.campusconnect.data.model.PostEntity.fromDomain(it) })
+            }
+
             emit(Resource.Success(postsList))
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Failed to fetch feed"))
+            val cachedEntities = postDao.getCachedPosts()
+            if (lastVisibleTimestamp != null || cachedEntities.isEmpty()) {
+                emit(Resource.Error(e.message ?: "Failed to fetch feed"))
+            }
         }
     }
 

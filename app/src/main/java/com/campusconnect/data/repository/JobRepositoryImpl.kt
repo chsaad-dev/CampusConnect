@@ -16,14 +16,20 @@ import javax.inject.Singleton
 @Singleton
 class JobRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val jobDao: com.campusconnect.data.local.JobDao
 ) : JobRepository {
 
     private val currentUid: String
         get() = auth.currentUser?.uid ?: throw Exception("User not logged in")
 
     override fun getJobs(): Flow<Resource<List<Job>>> = flow {
-        emit(Resource.Loading)
+        val cached = jobDao.getCachedJobs()
+        if (cached.isNotEmpty()) {
+            emit(Resource.Success(cached.map { it.toDomain() }))
+        } else {
+            emit(Resource.Loading)
+        }
         try {
             val snapshot = firestore.collection(Constants.COLLECTION_JOBS)
                 .orderBy(Constants.FIELD_CREATED_AT, Query.Direction.DESCENDING)
@@ -31,9 +37,16 @@ class JobRepositoryImpl @Inject constructor(
                 .await()
 
             val jobs = snapshot.toObjects(Job::class.java)
+
+            jobDao.clearAllJobs()
+            jobDao.insertJobs(jobs.map { com.campusconnect.data.model.JobEntity.fromDomain(it) })
+
             emit(Resource.Success(jobs))
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Failed to fetch jobs"))
+            val cachedAgain = jobDao.getCachedJobs()
+            if (cachedAgain.isEmpty()) {
+                emit(Resource.Error(e.message ?: "Failed to fetch jobs"))
+            }
         }
     }
 
