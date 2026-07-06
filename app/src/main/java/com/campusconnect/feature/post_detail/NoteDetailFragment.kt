@@ -73,6 +73,20 @@ class NoteDetailFragment : Fragment() {
                             binding.tvDownloads.text = "${details.downloads}"
                             binding.tvLikesCount.text = "${(details.downloads * 1.5).toInt() + 8}"
 
+                            if (details.fileUrl.isNotEmpty() && details.fileUrl.contains(".pdf", ignoreCase = true)) {
+                                viewLifecycleOwner.lifecycleScope.launch {
+                                    val bitmap = com.campusconnect.core.utils.PdfPageRenderer.renderFirstPage(
+                                        requireContext(),
+                                        details.fileUrl
+                                    )
+                                    if (bitmap != null && _binding != null) {
+                                        binding.ivNoteCover.setImageBitmap(bitmap)
+                                        binding.ivNoteCover.visibility = View.VISIBLE
+                                        binding.ivDefaultIcon.visibility = View.GONE
+                                    }
+                                }
+                            }
+
                             binding.btnOpenDocument.setOnClickListener {
                                 if (details.fileUrl.isNotEmpty()) {
                                     val intent = Intent(Intent.ACTION_VIEW)

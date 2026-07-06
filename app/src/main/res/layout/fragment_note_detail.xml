@@ -50,6 +50,15 @@
                 android:background="?attr/colorPrimary">
 
                 <ImageView
+                    android:id="@+id/iv_note_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    android:contentDescription="Note Cover Preview" />
+
+                <ImageView
+                    android:id="@+id/iv_default_icon"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_gravity="center"

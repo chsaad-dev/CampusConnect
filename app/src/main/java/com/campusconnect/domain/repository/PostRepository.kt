@@ -23,4 +23,6 @@ interface PostRepository {
     fun getAllNotes(): Flow<Resource<List<NoteDetails>>>
     fun getRecentStoryAuthors(): Flow<Resource<List<com.campusconnect.domain.model.User>>>
     fun searchPosts(query: String): Flow<Resource<List<Post>>>
+    fun getStatusByUserId(userId: String): Flow<Resource<List<Post>>>
+    fun getPostById(postId: String): Flow<Resource<Post>>
 }

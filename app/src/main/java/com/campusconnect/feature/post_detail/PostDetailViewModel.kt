@@ -23,6 +23,9 @@ class PostDetailViewModel @Inject constructor(
     private val userRepository: com.campusconnect.domain.repository.UserRepository
 ) : ViewModel() {
 
+    private val _parentPost = MutableStateFlow<Resource<com.campusconnect.domain.model.Post>>(Resource.Loading)
+    val parentPost: StateFlow<Resource<com.campusconnect.domain.model.Post>> = _parentPost.asStateFlow()
+
     private val _noteDetails = MutableStateFlow<Resource<NoteDetails>>(Resource.Loading)
     val noteDetails: StateFlow<Resource<NoteDetails>> = _noteDetails.asStateFlow()
 
@@ -36,6 +39,10 @@ class PostDetailViewModel @Inject constructor(
     val rideDetails: StateFlow<Resource<RideDetails>> = _rideDetails.asStateFlow()
 
     fun loadDetails(postId: String, postType: PostType) {
+        postRepository.getPostById(postId).onEach { result ->
+            _parentPost.value = result
+        }.launchIn(viewModelScope)
+
         when (postType) {
             PostType.NOTE -> {
                 postRepository.getNoteDetails(postId).onEach { result ->
@@ -59,6 +66,9 @@ class PostDetailViewModel @Inject constructor(
                 postRepository.getRideDetails(postId).onEach { result ->
                     _rideDetails.value = result
                 }.launchIn(viewModelScope)
+            }
+            PostType.STATUS -> {
+                // Status has no extra details to load
             }
         }
     }

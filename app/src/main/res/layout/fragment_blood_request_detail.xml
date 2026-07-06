@@ -87,6 +87,27 @@
                 android:background="@color/divider"
                 android:layout_marginBottom="@dimen/spacing_md" />
 
+            <!-- Attached Image Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_post_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/divider"
+                app:strokeWidth="1dp"
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_post_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="Attached Image" />
+            </com.google.android.material.card.MaterialCardView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

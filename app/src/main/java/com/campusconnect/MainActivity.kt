@@ -73,6 +73,14 @@ class MainActivity : AppCompatActivity() {
         startInAppNotificationListener()
         checkNotificationPermission()
         handleNotificationIntent(intent)
+
+        com.google.firebase.auth.FirebaseAuth.getInstance().addAuthStateListener { firebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user != null) {
+                setupFcmTokenRegistration()
+                startNotificationListener()
+            }
+        }
     }
 
     private fun setupNavigation() {
@@ -154,7 +162,26 @@ class MainActivity : AppCompatActivity() {
                     if (resource is Resource.Success) {
                         val unreadNotifs = resource.data.filter { !it.read && it.createdAt > sessionStartTime }
                         for (notif in unreadNotifs) {
-                            // Show local push notification
+                            val currentUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+                            val targetUid = if (currentUid != null && notif.refId.contains("_")) {
+                                notif.refId.split("_").firstOrNull { it != currentUid } ?: notif.refId
+                            } else {
+                                notif.refId
+                            }
+
+                            if (notif.type == "chat_message") {
+                                val currentDest = navController.currentDestination?.id
+                                if (currentDest == R.id.chatFragment) {
+                                    val openTargetUid = navController.currentBackStackEntry?.arguments?.getString("targetUid")
+                                    if (openTargetUid != null && openTargetUid == targetUid) {
+                                        launch {
+                                            notificationRepository.markAsRead(notif.notifId).collect {}
+                                        }
+                                        continue
+                                    }
+                                }
+                            }
+
                             NotificationHelper.showNotification(
                                 context = this@MainActivity,
                                 title = notif.title,
@@ -162,7 +189,14 @@ class MainActivity : AppCompatActivity() {
                                 type = notif.type,
                                 refId = notif.refId
                             )
-                            // Mark as read in Firestore
+
+                            com.campusconnect.core.common.NotificationEventBus.postEvent(
+                                notif.title,
+                                notif.body,
+                                notif.type,
+                                notif.refId
+                            )
+
                             launch {
                                 notificationRepository.markAsRead(notif.notifId).collect {}
                             }
@@ -184,12 +218,17 @@ class MainActivity : AppCompatActivity() {
         val refId = intent.getStringExtra("refId") ?: ""
 
         lifecycleScope.launch {
-            // Wait 500ms for navigation component graph setup if app was closed
             kotlinx.coroutines.delay(500)
+            val currentUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+            val targetUid = if (currentUid != null && refId.contains("_")) {
+                refId.split("_").firstOrNull { it != currentUid } ?: refId
+            } else {
+                refId
+            }
             val bundle = Bundle().apply {
                 putString("postId", refId)
                 putString("complaintId", refId)
-                putString("targetUid", refId)
+                putString("targetUid", targetUid)
                 putString("targetName", intent.getStringExtra("title") ?: "Chat")
             }
             try {
@@ -248,9 +287,16 @@ class MainActivity : AppCompatActivity() {
                         body = event.body,
                         avatarUrl = "",
                         onClick = {
-                            if (event.type == "chat" && event.refId.isNotEmpty()) {
+                            if ((event.type == "chat" || event.type == "chat_message") && event.refId.isNotEmpty()) {
+                                val currentUid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+                                val targetUid = if (currentUid != null && event.refId.contains("_")) {
+                                    event.refId.split("_").firstOrNull { it != currentUid } ?: event.refId
+                                } else {
+                                    event.refId
+                                }
                                 val bundle = Bundle().apply {
-                                    putString("chatId", event.refId)
+                                    putString("targetUid", targetUid)
+                                    putString("targetName", "Chat")
                                 }
                                 navController.navigate(R.id.chatFragment, bundle)
                             } else if (event.type == "friend_request") {

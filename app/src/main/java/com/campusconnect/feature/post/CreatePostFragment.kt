@@ -128,6 +128,9 @@ class CreatePostFragment : Fragment() {
                 binding.cardTypeRide.strokeWidth = activeStrokeWidth
                 binding.layoutFieldsRide.show()
             }
+            PostType.STATUS -> {
+                // Status has no dynamic fields layout
+            }
         }
     }
 
@@ -208,6 +211,9 @@ class CreatePostFragment : Fragment() {
                     extraData["seatsTotal"] = binding.etRideSeats.text.toString().toIntOrNull() ?: 0
                     extraData["seatsLeft"] = binding.etRideSeats.text.toString().toIntOrNull() ?: 0
                     extraData["cost"] = binding.etRideCost.text.toString().trim()
+                }
+                PostType.STATUS -> {
+                    // Status has no extra details fields
                 }
             }
 

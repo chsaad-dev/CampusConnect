@@ -83,6 +83,7 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment() {
         binding.cardTypeBlood.setOnClickListener { selectPostType(PostType.BLOOD) }
         binding.cardTypeLostfound.setOnClickListener { selectPostType(PostType.LOST_FOUND) }
         binding.cardTypeRide.setOnClickListener { selectPostType(PostType.RIDE) }
+        binding.cardTypeStatus.setOnClickListener { selectPostType(PostType.STATUS) }
     }
 
     private fun selectPostType(type: PostType) {
@@ -102,12 +103,15 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment() {
         binding.cardTypeLostfound.strokeWidth = defaultStroke
         binding.cardTypeRide.strokeColor = outlineColor
         binding.cardTypeRide.strokeWidth = defaultStroke
+        binding.cardTypeStatus.strokeColor = outlineColor
+        binding.cardTypeStatus.strokeWidth = defaultStroke
 
         // Reset backgrounds to transparent/default surface
         binding.cardTypeNote.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.surface))
         binding.cardTypeBlood.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.surface))
         binding.cardTypeLostfound.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.surface))
         binding.cardTypeRide.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.surface))
+        binding.cardTypeStatus.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.surface))
 
         // Hide dynamic inputs
         binding.layoutFieldsNote.visibility = View.GONE
@@ -140,6 +144,11 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.cardTypeRide.strokeWidth = activeStroke
                 binding.cardTypeRide.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.avatar_palette_4))
                 binding.layoutFieldsRide.visibility = View.VISIBLE
+            }
+            PostType.STATUS -> {
+                binding.cardTypeStatus.strokeColor = primaryColor
+                binding.cardTypeStatus.strokeWidth = activeStroke
+                binding.cardTypeStatus.backgroundTintList = android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.avatar_palette_5))
             }
         }
         validateFields()
@@ -213,12 +222,23 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun validateFields() {
         val caption = binding.etCaption.text.toString().trim()
-        if (caption.isEmpty()) {
+        val hasAttachment = selectedFileUri != null
+
+        val isTextOrMediaValid = if (currentPostType == PostType.STATUS) {
+            caption.isNotEmpty() || hasAttachment
+        } else {
+            caption.isNotEmpty()
+        }
+
+        if (!isTextOrMediaValid) {
             binding.btnSubmitPost.isEnabled = false
             return
         }
 
         val isValid = when (currentPostType) {
+            PostType.STATUS -> {
+                true
+            }
             PostType.NOTE -> {
                 val subject = binding.etNoteSubject.text.toString().trim()
                 val teacher = binding.etNoteTeacher.text.toString().trim()
@@ -274,6 +294,9 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment() {
                     extraData["seatsTotal"] = seatsVal
                     extraData["seatsLeft"] = seatsVal
                     extraData["cost"] = binding.etRideCost.text.toString().trim()
+                }
+                PostType.STATUS -> {
+                    // Status has no extra details fields
                 }
             }
 

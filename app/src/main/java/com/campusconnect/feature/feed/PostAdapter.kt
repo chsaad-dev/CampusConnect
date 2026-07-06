@@ -77,12 +77,14 @@ class PostAdapter(
                     PostType.BLOOD -> root.context.getColor(R.color.chip_blood_text)
                     PostType.LOST_FOUND -> root.context.getColor(R.color.chip_lostfound_text)
                     PostType.RIDE -> root.context.getColor(R.color.chip_ride_text)
+                    PostType.STATUS -> root.context.getColor(R.color.chip_note_text)
                 }
                 val chipBgColor = when (post.type) {
                     PostType.NOTE -> root.context.getColor(R.color.chip_note_bg)
                     PostType.BLOOD -> root.context.getColor(R.color.chip_blood_bg)
                     PostType.LOST_FOUND -> root.context.getColor(R.color.chip_lostfound_bg)
                     PostType.RIDE -> root.context.getColor(R.color.chip_ride_bg)
+                    PostType.STATUS -> root.context.getColor(R.color.chip_note_bg)
                 }
                 chipPostType.setTextColor(chipColor)
                 chipPostType.chipBackgroundColor = android.content.res.ColorStateList.valueOf(chipBgColor)

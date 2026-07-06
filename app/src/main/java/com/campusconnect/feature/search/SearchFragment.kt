@@ -58,6 +58,7 @@ class SearchFragment : Fragment() {
                     com.campusconnect.domain.model.PostType.BLOOD -> findNavController().navigate(R.id.bloodRequestDetailFragment, bundle)
                     com.campusconnect.domain.model.PostType.LOST_FOUND -> findNavController().navigate(R.id.lostFoundDetailFragment, bundle)
                     com.campusconnect.domain.model.PostType.RIDE -> findNavController().navigate(R.id.rideDetailFragment, bundle)
+                    com.campusconnect.domain.model.PostType.STATUS -> { /* No-op */ }
                 }
             }
         )

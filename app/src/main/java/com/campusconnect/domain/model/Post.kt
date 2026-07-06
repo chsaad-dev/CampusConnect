@@ -23,7 +23,8 @@ enum class PostType {
     NOTE,
     BLOOD,
     LOST_FOUND,
-    RIDE;
+    RIDE,
+    STATUS;
 
     companion object {
         fun fromString(value: String): PostType {
@@ -31,6 +32,7 @@ enum class PostType {
                 "BLOOD" -> BLOOD
                 "LOST_FOUND" -> LOST_FOUND
                 "RIDE" -> RIDE
+                "STATUS" -> STATUS
                 else -> NOTE
             }
         }

@@ -59,10 +59,18 @@ class HomeFragment : Fragment() {
         // Stories Row
         storyAdapter = StoryAdapter(
             onYourStoryClick = {
-                CreatePostBottomSheetFragment().show(childFragmentManager, "create_post")
+                val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                val hasActiveStatus = (viewModel.storyAuthorsState.value as? com.campusconnect.core.common.Resource.Success)?.data?.any { it.uid == uid } ?: false
+                if (hasActiveStatus && uid.isNotEmpty()) {
+                    val viewStorySheet = StoryViewBottomSheetFragment.newInstance(uid)
+                    viewStorySheet.show(childFragmentManager, "story_view")
+                } else {
+                    CreatePostBottomSheetFragment().show(childFragmentManager, "create_post")
+                }
             },
-            onAuthorStoryClick = { _ ->
-                CreatePostBottomSheetFragment().show(childFragmentManager, "create_post")
+            onAuthorStoryClick = { author ->
+                val viewStorySheet = StoryViewBottomSheetFragment.newInstance(author.uid)
+                viewStorySheet.show(childFragmentManager, "story_view")
             }
         )
         binding.rvStories.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -87,6 +95,7 @@ class HomeFragment : Fragment() {
                     com.campusconnect.domain.model.PostType.BLOOD -> findNavController().navigate(R.id.action_homeFragment_to_bloodRequestDetailFragment, bundle)
                     com.campusconnect.domain.model.PostType.LOST_FOUND -> findNavController().navigate(R.id.action_homeFragment_to_lostFoundDetailFragment, bundle)
                     com.campusconnect.domain.model.PostType.RIDE -> findNavController().navigate(R.id.action_homeFragment_to_rideDetailFragment, bundle)
+                    com.campusconnect.domain.model.PostType.STATUS -> { /* No-op, not shown in feed */ }
                 }
             }
         )

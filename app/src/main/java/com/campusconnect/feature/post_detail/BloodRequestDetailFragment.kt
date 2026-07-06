@@ -55,6 +55,26 @@ class BloodRequestDetailFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.parentPost.collectLatest { state ->
+                    if (state is Resource.Success) {
+                        val post = state.data
+                        val firstImageUrl = post.mediaUrls.firstOrNull()
+                        if (post.mediaType == com.campusconnect.domain.model.MediaType.IMAGE && firstImageUrl != null) {
+                            binding.cardPostImage.show()
+                            com.bumptech.glide.Glide.with(this@BloodRequestDetailFragment)
+                                .load(firstImageUrl)
+                                .placeholder(R.color.surface_variant)
+                                .into(binding.ivPostImage)
+                        } else {
+                            binding.cardPostImage.hide()
+                        }
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.bloodRequestDetails.collectLatest { state ->
                     when (state) {
                         is Resource.Loading -> {

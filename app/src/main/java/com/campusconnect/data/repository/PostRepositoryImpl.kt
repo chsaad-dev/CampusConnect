@@ -57,7 +57,7 @@ class PostRepositoryImpl @Inject constructor(
 
             for (doc in snapshot.documents) {
                 val post = doc.toObject(Post::class.java)
-                if (post != null) {
+                if (post != null && post.type != PostType.STATUS) {
                     val isLiked = if (currentUid != null) {
                         firestore.collection(Constants.COLLECTION_POSTS)
                             .document(post.postId)
@@ -163,6 +163,9 @@ class PostRepositoryImpl @Inject constructor(
                     rideData["status"] = "active"
                     rideData["createdAt"] = finalPost.createdAt
                     batch.set(rideRef, rideData)
+                }
+                PostType.STATUS -> {
+                    // Status only resides in unified posts collection, no extra subcollection doc needed
                 }
             }
 
@@ -442,7 +445,7 @@ class PostRepositoryImpl @Inject constructor(
                 .get()
                 .await()
 
-            val postsList = snapshot.toObjects(Post::class.java)
+            val postsList = snapshot.toObjects(Post::class.java).filter { it.type == PostType.STATUS }
             val distinctAuthors = postsList.distinctBy { it.authorId }.map { post ->
                 com.campusconnect.domain.model.User(
                     uid = post.authorId,
@@ -491,6 +494,36 @@ class PostRepositoryImpl @Inject constructor(
             emit(Resource.Success(postsList))
         } catch (e: java.lang.Exception) {
             emit(Resource.Error(e.message ?: "Failed to search posts"))
+        }
+    }
+
+    override fun getStatusByUserId(userId: String): Flow<Resource<List<Post>>> = flow {
+        emit(Resource.Loading)
+        try {
+            val oneDayAgo = System.currentTimeMillis() - 24 * 60 * 60 * 1000
+            val snapshot = firestore.collection(Constants.COLLECTION_POSTS)
+                .whereEqualTo("authorId", userId)
+                .get()
+                .await()
+
+            val list = snapshot.toObjects(Post::class.java)
+                .filter { it.type == PostType.STATUS && it.createdAt >= oneDayAgo }
+                .sortedBy { it.createdAt }
+
+            emit(Resource.Success(list))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch user status"))
+        }
+    }
+
+    override fun getPostById(postId: String): Flow<Resource<Post>> = flow {
+        emit(Resource.Loading)
+        try {
+            val doc = firestore.collection(Constants.COLLECTION_POSTS).document(postId).get().await()
+            val post = doc.toObject(Post::class.java) ?: throw Exception("Post not found")
+            emit(Resource.Success(post))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Failed to fetch post"))
         }
     }
 }

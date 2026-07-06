@@ -48,12 +48,11 @@
                 android:textColor="@color/text_secondary"
                 android:layout_marginBottom="10dp" />
 
-            <!-- 2x2 Post Type Grid -->
+            <!-- Post Type Grid -->
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:rowCount="2"
+                android:columnCount="3"
                 android:alignmentMode="alignMargins"
                 android:columnOrderPreserved="false"
                 android:layout_marginBottom="16dp">
@@ -200,6 +199,43 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ride"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurface" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Status Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_type_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/divider"
+                    app:strokeWidth="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:backgroundTint="?attr/colorSurface">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_icon_note"
+                            android:src="@drawable/ic_person"
+                            android:padding="6dp"
+                            android:tint="?attr/colorPrimary"
+                            android:layout_marginBottom="8dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Status"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="?attr/colorOnSurface" />

@@ -107,8 +107,14 @@ class FeedViewModel @Inject constructor(
                     if (newPosts.isEmpty()) {
                         isEndReached = true
                     } else {
+                        if (lastVisibleTimestamp == null) {
+                            postsList.clear()
+                        }
                         lastVisibleTimestamp = newPosts.last().createdAt
                         postsList.addAll(newPosts)
+                        val distinct = postsList.distinctBy { it.postId }
+                        postsList.clear()
+                        postsList.addAll(distinct)
                     }
                     emitCurrentFeed()
                 }
