@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorSurfaceVariant">
+
+    <!-- Top Toolbar with Assistant title -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="Campus Assistant"
+            app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider" />
+
+    <!-- Messages area -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_messages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="@dimen/spacing_sm" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <!-- Typing / Thinking Indicator -->
+    <TextView
+        android:id="@+id/tv_typing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_md"
+        android:layout_marginBottom="@dimen/spacing_xs"
+        android:textSize="@dimen/text_caption"
+        android:textStyle="italic"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:text="Assistant is thinking..." />
+
+    <!-- Bottom Message Input Panel -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/spacing_sm"
+        android:paddingVertical="@dimen/spacing_sm"
+        android:gravity="center_vertical"
+        android:background="?attr/colorSurface">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="@dimen/spacing_sm"
+            style="@style/CampusConnect.TextInput.Rounded"
+            app:hintEnabled="false"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="1dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ask anything..."
+                android:inputType="textShortMessage|textCapSentences|textAutoCorrect"
+                android:maxLines="4"
+                android:textSize="15sp"
+                android:paddingVertical="10dp"
+                android:fontFamily="sans-serif" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/btn_send"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_send"
+            app:tint="?attr/colorPrimary"
+            android:contentDescription="Send Message"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
+</LinearLayout>
