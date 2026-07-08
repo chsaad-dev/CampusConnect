@@ -69,6 +69,21 @@ class UserAvatarView @JvmOverloads constructor(
         }
     }
 
+    fun loadAvatar(resourceId: Int, name: String? = null) {
+        if (resourceId != 0) {
+            binding.tvInitials.visibility = GONE
+            binding.ivAvatar.visibility = VISIBLE
+            Glide.with(this)
+                .load(resourceId)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .circleCrop()
+                .into(binding.ivAvatar)
+        } else {
+            loadAvatar(null as String?, name)
+        }
+    }
+
     private fun getInitials(name: String?): String {
         if (name.isNullOrBlank()) return "?"
         val cleanName = name.trim()

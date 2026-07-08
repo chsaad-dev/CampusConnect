@@ -123,6 +123,9 @@ class SettingsFragment : Fragment() {
         binding.cardAssistant.setOnClickListener {
             findNavController().navigate(R.id.assistantFragment)
         }
+        binding.cardAbout.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_teamFragment)
+        }
         binding.cardFriends.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_friendsFragment)
         }

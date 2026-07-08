@@ -197,6 +197,13 @@
                 app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_in_left"
                 app:popExitAnim="@anim/slide_out_right" />
+            <action
+                android:id="@+id/action_settingsFragment_to_teamFragment"
+                app:destination="@id/teamFragment"
+                app:enterAnim="@anim/slide_in_right"
+                app:exitAnim="@anim/slide_out_left"
+                app:popEnterAnim="@anim/slide_in_left"
+                app:popExitAnim="@anim/slide_out_right" />
         </fragment>
 
         <fragment
@@ -391,6 +398,12 @@
             android:name="com.campusconnect.feature.assistant.AssistantFragment"
             android:label="Campus Assistant"
             tools:layout="@layout/fragment_assistant" />
+
+        <fragment
+            android:id="@+id/teamFragment"
+            android:name="com.campusconnect.feature.team.TeamFragment"
+            android:label="About &amp; Team"
+            tools:layout="@layout/fragment_team" />
 
     </navigation>
 

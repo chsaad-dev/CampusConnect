@@ -88,14 +88,24 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        // Set start destination based on auth state
+        // Set start destination based on dynamic destination parameter passed from SplashActivity
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
-        if (authViewModel.isLoggedIn()) {
-            navGraph.setStartDestination(R.id.main_nav_graph)
-            setupFcmTokenRegistration()
-            startNotificationListener()
-        } else {
-            navGraph.setStartDestination(R.id.auth_nav_graph)
+        val startDestExtra = intent.getStringExtra("EXTRA_START_DESTINATION") ?: "login"
+
+        when (startDestExtra) {
+            "home" -> {
+                navGraph.setStartDestination(R.id.main_nav_graph)
+                setupFcmTokenRegistration()
+                startNotificationListener()
+            }
+            "profile_completion" -> {
+                val authGraph = navGraph.findNode(R.id.auth_nav_graph) as? androidx.navigation.NavGraph
+                authGraph?.setStartDestination(R.id.profileCompletionFragment)
+                navGraph.setStartDestination(R.id.auth_nav_graph)
+            }
+            else -> {
+                navGraph.setStartDestination(R.id.auth_nav_graph)
+            }
         }
         navController.graph = navGraph
 
