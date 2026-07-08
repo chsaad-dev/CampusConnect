@@ -39,14 +39,14 @@ class TeamFragment : Fragment() {
         val teamMembers = listOf(
             TeamMember(
                 name = "Muhammad Saad",
-                role = "Lead-Developer",
+                role = "Developer",
                 avatarRes = com.campusconnect.R.drawable.ic_saad,
                 githubUrl = "https://github.com/chsaad-dev",
                 linkedinUrl = "https://www.linkedin.com/in/muhammad-saad075/"
             ),
             TeamMember(
                 name = "Ghulam Fareed",
-                role = "Co-Developer",
+                role = "Developer",
                 avatarRes = com.campusconnect.R.drawable.ic_farid,
                 githubUrl = "https://github.com/fareediftikhar70-jpg",
                 linkedinUrl = "https://www.linkedin.com/in/ghulam-farid-06635541a/"
@@ -82,8 +82,6 @@ class TeamAdapter(private val members: List<TeamMember>) :
         holder.binding.apply {
             tvName.text = member.name
             tvRole.text = member.role
-            
-            // Use UserAvatarView for dynamic loading of local resource or initials fallback
             viewAvatar.loadAvatar(member.avatarRes, member.name)
 
             ivGithub.isVisible = member.githubUrl != null

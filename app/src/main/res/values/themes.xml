@@ -61,10 +61,15 @@
 
     <!-- Splash Screen Theme (uses Android 12+ SplashScreen library) -->
     <style name="Theme.CampusConnect.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/primary</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcherd</item>
         <item name="windowSplashScreenAnimationDuration">900</item>
         <item name="postSplashScreenTheme">@style/Theme.CampusConnect</item>
+    </style>
+
+    <!-- Corner size overlay to force images to be perfectly circular -->
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>
