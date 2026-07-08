@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import android.widget.ArrayAdapter
+import android.widget.AdapterView
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
@@ -40,6 +42,9 @@ class SettingsFragment : Fragment() {
     @Inject
     lateinit var firestore: com.google.firebase.firestore.FirebaseFirestore
 
+    @Inject
+    lateinit var preferenceManager: com.campusconnect.core.common.PreferenceManager
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -52,6 +57,7 @@ class SettingsFragment : Fragment() {
         setupThemeToggle()
         setupLogout()
         setupMenuClickListeners()
+        setupLanguageSpinner()
         loadUserProfile()
     }
 
@@ -84,7 +90,39 @@ class SettingsFragment : Fragment() {
         }
     }
 
+    private fun setupLanguageSpinner() {
+        val languages = listOf("Urdu", "Arabic", "Spanish", "French", "English")
+        val langCodes = listOf("ur", "ar", "es", "fr", "en")
+        
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+        binding.spinnerTranslationLang.adapter = adapter
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                preferenceManager.targetTranslationLanguage.collectLatest { currentLangCode ->
+                    val index = langCodes.indexOf(currentLangCode).coerceAtLeast(0)
+                    binding.spinnerTranslationLang.setSelection(index)
+                }
+            }
+        }
+
+        binding.spinnerTranslationLang.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedCode = langCodes[position]
+                viewLifecycleOwner.lifecycleScope.launch {
+                    preferenceManager.setTargetTranslationLanguage(selectedCode)
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
     private fun setupMenuClickListeners() {
+        binding.cardAssistant.setOnClickListener {
+            findNavController().navigate(R.id.assistantFragment)
+        }
         binding.cardFriends.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_friendsFragment)
         }

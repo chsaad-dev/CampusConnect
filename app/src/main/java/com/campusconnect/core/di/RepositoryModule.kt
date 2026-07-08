@@ -89,4 +89,10 @@ abstract class RepositoryModule {
     abstract fun bindMediaRepository(
         impl: CloudinaryMediaRepository
     ): MediaRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAssistantRepository(
+        impl: com.campusconnect.data.repository.AssistantRepositoryImpl
+    ): com.campusconnect.domain.repository.AssistantRepository
 }

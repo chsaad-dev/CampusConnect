@@ -30,6 +30,9 @@ class SearchFragment : Fragment() {
     @Inject
     lateinit var postRepository: PostRepository
 
+    @Inject
+    lateinit var preferenceManager: com.campusconnect.core.common.PreferenceManager
+
     private lateinit var adapter: PostAdapter
     private var searchJob: Job? = null
 
@@ -48,6 +51,7 @@ class SearchFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = PostAdapter(
+            preferenceManager = preferenceManager,
             onLikeClick = { post -> toggleLike(post) },
             onCommentClick = { post -> showComments(post.postId) },
             onShareClick = { post -> sharePost(post) },

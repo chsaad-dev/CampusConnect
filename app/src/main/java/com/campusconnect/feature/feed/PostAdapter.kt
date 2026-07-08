@@ -13,13 +13,23 @@ import com.campusconnect.databinding.ItemPostCardBinding
 import com.campusconnect.domain.model.MediaType
 import com.campusconnect.domain.model.Post
 import com.campusconnect.domain.model.PostType
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 class PostAdapter(
+    private val preferenceManager: com.campusconnect.core.common.PreferenceManager,
     private val onLikeClick: (Post) -> Unit,
     private val onCommentClick: (Post) -> Unit,
     private val onShareClick: (Post) -> Unit,
     private val onCardClick: (Post) -> Unit
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(PostDiffCallback()) {
+
+    private val translationCache = mutableMapOf<String, String>()
+    private val showingTranslation = mutableSetOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val binding = ItemPostCardBinding.inflate(
@@ -63,7 +73,60 @@ class PostAdapter(
                 )
                 tvUsernameTime.text = "@${post.authorUsername} • $timeAgo"
                 
-                tvCaption.text = post.caption
+                val isTranslated = showingTranslation.contains(post.postId)
+                val cached = translationCache[post.postId]
+
+                if (isTranslated && cached != null) {
+                    tvCaption.text = cached
+                    tvTranslate.text = "Show Original"
+                } else {
+                    tvCaption.text = post.caption
+                    tvTranslate.text = "Translate"
+                }
+
+                tvTranslate.setOnClickListener {
+                    if (showingTranslation.contains(post.postId)) {
+                        showingTranslation.remove(post.postId)
+                        tvCaption.text = post.caption
+                        tvTranslate.text = "Translate"
+                    } else {
+                        val currentCached = translationCache[post.postId]
+                        if (currentCached != null) {
+                            showingTranslation.add(post.postId)
+                            tvCaption.text = currentCached
+                            tvTranslate.text = "Show Original"
+                        } else {
+                            tvTranslate.text = "Translating..."
+                            CoroutineScope(Dispatchers.Main).launch {
+                                try {
+                                    val targetLang = preferenceManager.targetTranslationLanguage.first()
+                                    com.campusconnect.core.translation.TranslationHelper.translate(
+                                        post.caption,
+                                        targetLang
+                                    ) { translatedText ->
+                                        if (translatedText != null) {
+                                            translationCache[post.postId] = translatedText
+                                            showingTranslation.add(post.postId)
+                                            if (tvTranslate.text == "Translating...") {
+                                                tvCaption.text = translatedText
+                                                tvTranslate.text = "Show Original"
+                                            }
+                                        } else {
+                                            tvTranslate.text = "Translation Failed"
+                                            root.postDelayed({
+                                                if (tvTranslate.text == "Translation Failed") {
+                                                    tvTranslate.text = "Translate"
+                                                }
+                                            }, 2000)
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                    tvTranslate.text = "Translate"
+                                }
+                            }
+                        }
+                    }
+                }
                 tvLikeCount.text = post.likeCount.toString()
                 tvCommentCount.text = post.commentCount.toString()
 

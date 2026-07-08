@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import javax.inject.Inject
 import com.campusconnect.R
 import com.campusconnect.core.common.Resource
 import com.campusconnect.core.common.hide
@@ -31,6 +32,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var preferenceManager: com.campusconnect.core.common.PreferenceManager
 
     private val viewModel: FeedViewModel by viewModels()
     private lateinit var adapter: PostAdapter
@@ -85,6 +89,7 @@ class HomeFragment : Fragment() {
         binding.rvRecommendedNotes.adapter = recommendedAdapter
 
         adapter = PostAdapter(
+            preferenceManager = preferenceManager,
             onLikeClick = { post -> viewModel.toggleLike(post) },
             onCommentClick = { post -> showComments(post.postId) },
             onShareClick = { post -> sharePost(post) },
@@ -131,6 +136,10 @@ class HomeFragment : Fragment() {
     private fun setupListeners() {
         binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadInitialFeed()
+        }
+
+        binding.ivAssistant.setOnClickListener {
+            findNavController().navigate(R.id.assistantFragment)
         }
 
         binding.ivSearch.setOnClickListener {

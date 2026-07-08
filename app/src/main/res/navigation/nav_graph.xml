@@ -386,6 +386,12 @@
             android:label="Scan Ticket"
             tools:layout="@layout/fragment_ticket_scanner" />
 
+        <fragment
+            android:id="@+id/assistantFragment"
+            android:name="com.campusconnect.feature.assistant.AssistantFragment"
+            android:label="Campus Assistant"
+            tools:layout="@layout/fragment_assistant" />
+
     </navigation>
 
 </navigation>

@@ -282,7 +282,22 @@ class AdminDashboardFragment : Fragment() {
                             is Resource.Success -> {
                                 binding.progressBar.hide()
                                 val list = state.data
-                                complaintsAdapter.submitList(list)
+                                val sortedList = list.sortedWith { o1, o2 ->
+                                    val p1 = when (o1.priority.lowercase()) {
+                                        "high" -> 3
+                                        "medium" -> 2
+                                        "low" -> 1
+                                        else -> 2
+                                    }
+                                    val p2 = when (o2.priority.lowercase()) {
+                                        "high" -> 3
+                                        "medium" -> 2
+                                        "low" -> 1
+                                        else -> 2
+                                    }
+                                    p2.compareTo(p1)
+                                }
+                                complaintsAdapter.submitList(sortedList)
 
                                 if (list.isEmpty()) {
                                     binding.emptyStateComplaints.show()
