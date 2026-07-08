@@ -33,6 +33,7 @@ android {
 
         buildConfigField("String", "CLOUDINARY_CLOUD_NAME", "\"${localProperties.getProperty("CLOUDINARY_CLOUD_NAME", "")}\"")
         buildConfigField("String", "CLOUDINARY_UPLOAD_PRESET", "\"${localProperties.getProperty("CLOUDINARY_UPLOAD_PRESET", "")}\"")
+        buildConfigField("String", "GEMINI_PROXY_URL", "\"${localProperties.getProperty("GEMINI_PROXY_URL", "")}\"")
     }
 
     buildTypes {
@@ -120,6 +121,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // ML Kit Translation
+    implementation("com.google.mlkit:translate:17.0.3")
+    implementation("com.google.mlkit:language-id:17.0.5")
+
+    // Gson
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 kapt {

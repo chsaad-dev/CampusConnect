@@ -15,6 +15,12 @@ import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
+data class ComplaintAnalysis(
+    val category: String = "other",
+    val urgency: String = "medium",
+    val reasoning: String = ""
+)
+
 @Singleton
 class ComplaintRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
@@ -24,6 +30,24 @@ class ComplaintRepositoryImpl @Inject constructor(
 
     private val currentUid: String
         get() = auth.currentUser?.uid ?: throw Exception("User not logged in")
+
+    private suspend fun analyzeComplaint(description: String): ComplaintAnalysis {
+        val prompt = """
+            Categorize this student complaint. Respond only JSON, no markdown:
+            {"category": "wifi|electrical|plumbing|furniture|academic|other",
+             "urgency": "low|medium|high",
+             "reasoning": "one sentence"}
+            Complaint: "$description"
+        """.trimIndent()
+        val response = com.campusconnect.core.network.GeminiClient.withBackoff {
+            com.campusconnect.core.network.GeminiClient.generateContent(prompt)
+        }
+        val cleaned = response.trim()
+            .removePrefix("```json")
+            .removeSuffix("```")
+            .trim()
+        return com.google.gson.Gson().fromJson(cleaned, ComplaintAnalysis::class.java)
+    }
 
     override fun submitComplaint(complaint: Complaint, imageUri: Uri?): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
@@ -47,6 +71,27 @@ class ComplaintRepositoryImpl @Inject constructor(
                 .document(complaintId)
                 .set(finalComplaint)
                 .await()
+
+            // Run Gemini AI analysis to update category and urgency dynamically
+            try {
+                val analysis = analyzeComplaint(finalComplaint.description)
+                val mappedPriority = when (analysis.urgency.lowercase()) {
+                    "low" -> "Low"
+                    "high" -> "High"
+                    else -> "Medium"
+                }
+                
+                val updates = mapOf(
+                    "category" to analysis.category,
+                    "priority" to mappedPriority
+                )
+                firestore.collection(Constants.COLLECTION_COMPLAINTS)
+                    .document(complaintId)
+                    .update(updates)
+                    .await()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
 
             emit(Resource.Success(Unit))
         } catch (e: Exception) {

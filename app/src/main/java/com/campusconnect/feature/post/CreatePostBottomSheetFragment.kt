@@ -17,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.NavHostFragment
 import com.campusconnect.R
 import com.campusconnect.core.common.Resource
+import com.campusconnect.core.common.showErrorSnackbar
 import com.campusconnect.databinding.DialogCreatePostBottomSheetBinding
 import com.campusconnect.domain.model.MediaType
 import com.campusconnect.domain.model.PostType
@@ -303,14 +304,36 @@ class CreatePostBottomSheetFragment : BottomSheetDialogFragment() {
             // In our system, default department to "General" unless loaded from profile
             val department = "General"
 
-            viewModel.createPost(
-                caption = caption,
-                type = currentPostType,
-                mediaType = selectedMediaType,
-                fileUri = selectedFileUri,
-                department = department,
-                extraData = extraData
-            )
+            viewLifecycleOwner.lifecycleScope.launch {
+                binding.progressBar.visibility = View.VISIBLE
+                binding.btnSubmitPost.isEnabled = false
+
+                var isSafe = true
+                if (selectedMediaType == MediaType.IMAGE && selectedFileUri != null) {
+                    val result = com.campusconnect.core.utils.ContentModerator.moderateImage(
+                        requireContext(),
+                        selectedFileUri!!
+                    )
+                    if (!result.safe) {
+                        isSafe = false
+                        showErrorSnackbar("This image violates content guidelines (Category: ${result.category})")
+                    }
+                }
+
+                binding.progressBar.visibility = View.GONE
+                binding.btnSubmitPost.isEnabled = true
+
+                if (isSafe) {
+                    viewModel.createPost(
+                        caption = caption,
+                        type = currentPostType,
+                        mediaType = selectedMediaType,
+                        fileUri = selectedFileUri,
+                        department = department,
+                        extraData = extraData
+                    )
+                }
+            }
         }
     }
 

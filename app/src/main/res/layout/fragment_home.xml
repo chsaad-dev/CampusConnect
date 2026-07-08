@@ -23,6 +23,20 @@
             app:titleTextAppearance="@style/CampusConnect.TextAppearance.Toolbar"
             app:titleTextColor="?attr/colorPrimary">
 
+            <!-- Campus Assistant bot icon -->
+            <ImageView
+                android:id="@+id/iv_assistant"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/spacing_md"
+                android:src="@android:drawable/ic_menu_help"
+                app:tint="?attr/colorOnSurfaceVariant"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Campus Assistant"
+                android:clickable="true"
+                android:focusable="true" />
+
             <!-- Search posts icon -->
             <ImageView
                 android:id="@+id/iv_search"
