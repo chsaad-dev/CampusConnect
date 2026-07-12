@@ -7,6 +7,7 @@ import com.campusconnect.domain.model.User
 import com.campusconnect.domain.usecase.auth.CheckEmailVerifiedUseCase
 import com.campusconnect.domain.usecase.auth.ForgotPasswordUseCase
 import com.campusconnect.domain.usecase.auth.LoginUseCase
+import com.campusconnect.domain.usecase.auth.LoginWithGoogleUseCase
 import com.campusconnect.domain.usecase.auth.RegisterUseCase
 import com.campusconnect.domain.usecase.user.GetCurrentUserUseCase
 import com.campusconnect.domain.repository.AuthRepository
@@ -22,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
+    private val loginWithGoogleUseCase: LoginWithGoogleUseCase,
     private val registerUseCase: RegisterUseCase,
     private val forgotPasswordUseCase: ForgotPasswordUseCase,
     private val checkEmailVerifiedUseCase: CheckEmailVerifiedUseCase,
@@ -47,6 +49,12 @@ class AuthViewModel @Inject constructor(
 
     fun login(email: String, password: String) {
         loginUseCase(email, password).onEach { result ->
+            _loginState.value = result
+        }.launchIn(viewModelScope)
+    }
+
+    fun loginWithGoogle(idToken: String) {
+        loginWithGoogleUseCase(idToken).onEach { result ->
             _loginState.value = result
         }.launchIn(viewModelScope)
     }

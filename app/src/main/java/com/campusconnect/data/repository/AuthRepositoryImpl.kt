@@ -90,4 +90,29 @@ class AuthRepositoryImpl @Inject constructor(
     override fun getCurrentUid(): String? {
         return auth.currentUser?.uid
     }
+
+    override fun loginWithGoogle(idToken: String): Flow<Resource<User>> = flow {
+        emit(Resource.Loading)
+        try {
+            val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
+            val result = auth.signInWithCredential(credential).await()
+            val uid = result.user?.uid ?: throw Exception("Google login failed: no user ID")
+            val email = result.user?.email ?: ""
+
+            val doc = firestore.collection(Constants.COLLECTION_USERS)
+                .document(uid)
+                .get()
+                .await()
+
+            val userDto = doc.toObject(UserDto::class.java)
+            if (userDto != null) {
+                emit(Resource.Success(userDto.toDomain()))
+            } else {
+                // User auth exists but no Firestore profile — needs profile completion
+                emit(Resource.Success(User(uid = uid, email = email)))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "Google login failed"))
+        }
+    }
 }

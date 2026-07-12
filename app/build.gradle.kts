@@ -131,6 +131,9 @@ dependencies {
 
     // Android Core Splashscreen
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // Google Play Services Auth for Google Sign-In
+    implementation(libs.play.services.auth)
 }
 
 kapt {

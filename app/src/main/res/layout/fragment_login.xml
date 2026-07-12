@@ -123,6 +123,22 @@
             android:layout_marginTop="@dimen/spacing_sm"
             android:visibility="gone" />
 
+        <!-- Google Sign-In Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_google"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:text="Continue with Google"
+            android:textColor="?attr/colorOnBackground"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp"
+            app:icon="@drawable/ic_google"
+            app:iconTint="@null"
+            android:textSize="@dimen/text_subtitle"
+            android:textStyle="bold" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"

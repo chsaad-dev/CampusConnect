@@ -16,4 +16,5 @@ interface AuthRepository {
     fun logout()
     fun isLoggedIn(): Boolean
     fun getCurrentUid(): String?
+    fun loginWithGoogle(idToken: String): Flow<Resource<User>>
 }
