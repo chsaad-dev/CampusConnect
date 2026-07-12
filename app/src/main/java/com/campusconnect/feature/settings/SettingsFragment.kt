@@ -138,9 +138,6 @@ class SettingsFragment : Fragment() {
         binding.cardJobs.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_jobListFragment)
         }
-        binding.cardAdmin.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_adminDashboardFragment)
-        }
     }
 
     private fun loadUserProfile() {
@@ -174,12 +171,6 @@ class SettingsFragment : Fragment() {
 
                         // Render subject analytics
                         renderSubjectAnalytics(user.viewedSubjects)
-
-                        if (user.role == UserRole.ADMIN) {
-                            binding.cardAdmin.visibility = View.VISIBLE
-                        } else {
-                            binding.cardAdmin.visibility = View.GONE
-                        }
                     }
                 }
             }
